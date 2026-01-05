@@ -4,21 +4,28 @@ import "./Window.css";
 export default function Window({ 
     title, 
     children, 
+    isActive,
     onClose, 
     position, 
+    onMove,
     zIndex, 
     onFocus,
     onMinimize,
-    minimized
+    onMaximize,
+    minimized,
+    maximized
     }) {
 
     const WindowRef = useRef();
+    const clickTimeout = useRef(null);
+
     const [pos, setPos] = useState(position);
     const [dragging, setDragging] = useState(false);
     const offset = useRef({ x: 0, y: 0 });
 
     // dragging is true when mouse is clicking down
     function onMouseDown(e) {
+        if (maximized) return; // no dragging when window maximized
         setDragging(true);
         offset.current = {
             x: e.clientX - pos.x,
@@ -26,23 +33,29 @@ export default function Window({
         };
     }
 
+    useEffect(() => {
+        setPos(position);
+    }, [position]);
+
     // smooth dragging using global mousemove
     useEffect(() => {
         function handleMouseMove(e) {
-            if (!dragging) return;
+            if (!dragging || maximized) return;
             let newX = e.clientX - offset.current.x;
             let newY = e.clientY - offset.current.y;
 
             // clamp values so window stays in viewport
-            const maxX = window.innerWidth - 300;  // 300px = window width
-            const maxY = window.innerHeight - 200; // adjust based on your window height
+            if (!maximized) {
+                const maxX = window.innerWidth - 300;  // 300px = window width
+                const maxY = window.innerHeight - 200; // adjust based on your window height
 
-            if (newX < 0) newX = 0;
-            if (newY < 0) newY = 0;
-            if (newX > maxX) newX = maxX;
-            if (newY > maxY) newY = maxY;
-
+                if (newX < 0) newX = 0;
+                if (newY < 0) newY = 0;
+                if (newX > maxX) newX = maxX;
+                if (newY > maxY) newY = maxY;
+            }
             setPos({ x: newX, y: newY });
+            onMove({x : newX, y: newY});
 
         }
 
@@ -65,7 +78,7 @@ export default function Window({
     return (
        
         <div
-            className="window"
+            className={`window ${maximized ? "maximized": ""} ${isActive ? "active" : "inactive"}`}
             style={{
                 top: pos.y,
                 left: pos.x,
@@ -73,10 +86,33 @@ export default function Window({
             }}
             onMouseDown={onFocus}
         >
-            <div className="window-titlebar" onMouseDown={(e) => {onMouseDown(e); onFocus();}}>
+            <div 
+                className="window-titlebar" 
+                onMouseDown={(e) => {
+                    onFocus();
+                    // if there is another click waiting, must be double click
+                    if (clickTimeout.current) {
+                        clearTimeout(clickTimeout.current);
+                        clickTimeout.current = null;
+                        onMaximize();
+                        return;
+                    }  
+                    // no click waiting, wait for a little, 200 ms
+                    clickTimeout.current = setTimeout(() => {
+                        clickTimeout.current = null;
+                        onMouseDown(e); // single click then drag
+                    }, 200);           
+                }}
+            >
                 <span>{title}</span>
-                <button className="window-minimize" onClick={onMinimize}>-</button>
-                <button className="window-close" onClick={onClose}>x</button>
+                <div className="window-controls">
+                    <button className={`window-maximize ${maximized ? "active" : ""}`}
+                        onClick={onMaximize}
+                    />
+
+                    <button className="window-minimize" onClick={onMinimize}/>
+                    <button className="window-close" onClick={onClose}/>
+                </div>
             </div>
 
             <div className="window-content">

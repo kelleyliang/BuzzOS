@@ -7,11 +7,15 @@ import Taskbar from "./components/Taskbar";
 
 function App() {
   const [windows, setWindows] = useState([]);
+  const [activeWindowId, setActiveWindowId] = useState(null);
 
   function openWindow(id, title, content) {
     // If already open, do nothing (later we bring to front)
-    if (windows.some(w => w.id === id)) return;
-
+    if (windows.some(w => w.id === id)) {
+      bringToFront(id)
+      setActiveWindowId(id); // sets the recent opened to active
+      return;
+    }
     setWindows(prev => [
       ...prev,
       {
@@ -20,9 +24,47 @@ function App() {
         content,
         position: { x: 100, y: 100 },
         zIndex: prev.length + 1, // new window on top
-        minimized: false 
+        minimized: false,
+        maximized: false,
+        prevPosition: null
       }
     ]);
+    
+  }
+
+  function updateWindowPosition(id, newPos) {
+    setWindows(prev =>
+      prev.map(w =>
+        w.id === id ? {...w, position: newPos } : w
+      )
+    );
+  }
+
+  function toggleMaximize(id) {
+    setWindows(prev =>
+      prev.map(w => {
+        if (w.id !== id) return w;
+        
+        // have the correct window id and maximize is false
+        if (!w.maximized) {
+          // maximize
+          return {
+            ...w,
+            maximized: true,
+            prevPosition: w.position,
+            position: {x: 0, y: 0}
+          };
+        } else {
+          // restore pre maximized version
+          return {
+            ...w,
+            maximized:false,
+            position: w.prevPosition,
+            prevPosition: null
+          };
+        }
+      })
+    );
   }
 
   function minimizeWindow(id) {
@@ -39,9 +81,13 @@ function App() {
         w.id === id ? {... w, minimized: false} : w
       )
     );
+    setActiveWindowId(id);
+    bringToFront(id);
   }
 
   function bringToFront(id) {
+    setActiveWindowId(id);
+
     setWindows(prev => {
       const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
 
@@ -88,9 +134,13 @@ function App() {
           position={window.position}
           zIndex={window.zIndex}
           minimized={window.minimized}
+          maximized={window.maximized}
+          isActive={activeWindowId === window.id}
           onFocus={() => bringToFront(window.id)}
           onClose={() => closeWindow(window.id)}
           onMinimize={() => minimizeWindow(window.id)}
+          onMaximize={() => toggleMaximize(window.id)}
+          onMove={(pos) => updateWindowPosition(window.id, pos)}
         >
           {window.content}
         </Window>
