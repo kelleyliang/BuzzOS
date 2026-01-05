@@ -17,3 +17,9 @@
   cursor: pointer;
   font-size: 14px;
 }
+
+.taskbar-item.active {
+  background: #ffffff;
+  border: 2px solid black;
+}
+

@@ -9,6 +9,29 @@ function App() {
   const [windows, setWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
 
+  // TASKBAR ACTIONS
+  function handleTaskBarClick(id) {
+    const window = windows.find(w => w.id === id);
+    if (!window) return;
+
+    // case 1: minimized -> restore and focus
+    if (window.minimized) {
+      restoreWindow(id);
+      return;
+    }
+
+    // case 2: active -> minimize
+    if (activeWindowId === id) {
+      minimizeWindow(id)
+      return;
+    }
+
+    // case 3: inactive -> bring to fron and focus
+    bringToFront(id)
+    setActiveWindowId(id)
+  }
+
+  // WINDOW FUNCTIONS
   function openWindow(id, title, content) {
     // If already open, do nothing (later we bring to front)
     if (windows.some(w => w.id === id)) {
@@ -26,10 +49,12 @@ function App() {
         zIndex: prev.length + 1, // new window on top
         minimized: false,
         maximized: false,
-        prevPosition: null
+        prevMaximizePosition: null,
+        prevMinimizePosition: null
       }
     ]);
-    
+
+    setActiveWindowId(id);
   }
 
   function updateWindowPosition(id, newPos) {
@@ -51,7 +76,7 @@ function App() {
           return {
             ...w,
             maximized: true,
-            prevPosition: w.position,
+            prevMaximizePosition: w.position,
             position: {x: 0, y: 0}
           };
         } else {
@@ -59,7 +84,7 @@ function App() {
           return {
             ...w,
             maximized:false,
-            position: w.prevPosition,
+            position: w.prevMaximizePosition,
             prevPosition: null
           };
         }
@@ -70,7 +95,7 @@ function App() {
   function minimizeWindow(id) {
     setWindows(prev =>
       prev.map(w =>
-        w.id === id ? {...w, minimized: true} : w
+        w.id === id ? {...w, minimized: true, prevMinimizePosition: w.position} : w
       )
     );
   }
@@ -78,7 +103,14 @@ function App() {
   function restoreWindow(id) {
     setWindows(prev =>
       prev.map(w =>
-        w.id === id ? {... w, minimized: false} : w
+        w.id === id 
+          ? {
+              ... w, 
+              minimized: false,
+              position: w.prevMinimizePosition ?? w.position,
+              prevMinimizePosition: null
+            } 
+          : w
       )
     );
     setActiveWindowId(id);
@@ -107,7 +139,8 @@ function App() {
       {/* TASKBAR */}
       <Taskbar  
         windows={windows}
-        onRestore={restoreWindow}
+        activeWindowId={activeWindowId}
+        onClickWindow={handleTaskBarClick}
       />
 
       {/* ICONS */}

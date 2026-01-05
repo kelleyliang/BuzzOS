@@ -7,17 +7,23 @@ export default function Window({
     isActive,
     onClose, 
     position, 
+
+
     onMove,
     zIndex, 
     onFocus,
     onMinimize,
     onMaximize,
+
     minimized,
-    maximized
+    maximized,
+
+    prevMaximizePosition, // before maximize
+    prevMinimizePosition // before minimalize
     }) {
 
     const WindowRef = useRef();
-    const clickTimeout = useRef(null);
+    const lastClickTime = useRef(0);
 
     const [pos, setPos] = useState(position);
     const [dragging, setDragging] = useState(false);
@@ -61,7 +67,10 @@ export default function Window({
 
         // when mouse is not clicking down on track, drag is false
         function handleMouseUp() {
-            setDragging(false);
+            // if check for no stale renentries, have to check not sure
+            if (dragging) {
+                setDragging(false);
+            }
         }
 
         document.addEventListener("mousemove", handleMouseMove);
@@ -71,9 +80,12 @@ export default function Window({
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [dragging]);
+    }, [dragging, maximized]);
 
     if (minimized) return null;
+    
+    // adding it correctly here?
+    if (!pos) return null;
 
     return (
        
@@ -90,18 +102,26 @@ export default function Window({
                 className="window-titlebar" 
                 onMouseDown={(e) => {
                     onFocus();
-                    // if there is another click waiting, must be double click
-                    if (clickTimeout.current) {
-                        clearTimeout(clickTimeout.current);
-                        clickTimeout.current = null;
+                    const now = Date.now();
+                    const DOUBLE_CLICK_DELAY = 250;
+                    
+                    // double click = maximize
+                    if (now - lastClickTime.current < DOUBLE_CLICK_DELAY) {
+                        lastClickTime.current = 0;
+                        setDragging(false); // cancel drag, maximize
                         onMaximize();
                         return;
-                    }  
-                    // no click waiting, wait for a little, 200 ms
-                    clickTimeout.current = setTimeout(() => {
-                        clickTimeout.current = null;
-                        onMouseDown(e); // single click then drag
-                    }, 200);           
+                    }
+                    // else this is a single click
+                    lastClickTime.current = now;
+
+                    if (!maximized) {
+                        setDragging(true);
+                        offset.current = {
+                            x: e.clientX - pos.x,
+                            y: e.clientY - pos.y
+                        };
+                    }
                 }}
             >
                 <span>{title}</span>
