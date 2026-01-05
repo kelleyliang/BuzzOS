@@ -3,6 +3,7 @@ import Desktop from "./components/Desktop";
 import DesktopIcon from "./components/DesktopIcon";
 import Window from "./components/Window";
 import folderIcon from "./assets/folder.png";
+import Taskbar from "./components/Taskbar";
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -27,7 +28,15 @@ function App() {
   function minimizeWindow(id) {
     setWindows(prev =>
       prev.map(w =>
-        w.id === id ? {...w, minimized: trye} : w
+        w.id === id ? {...w, minimized: true} : w
+      )
+    );
+  }
+  
+  function restoreWindow(id) {
+    setWindows(prev =>
+      prev.map(w =>
+        w.id === id ? {... w, minimized: false} : w
       )
     );
   }
@@ -49,6 +58,11 @@ function App() {
 
   return (
     <Desktop>
+      {/* TASKBAR */}
+      <Taskbar  
+        windows={windows}
+        onRestore={restoreWindow}
+      />
 
       {/* ICONS */}
       <DesktopIcon
@@ -73,8 +87,10 @@ function App() {
           title={window.title}
           position={window.position}
           zIndex={window.zIndex}
+          minimized={window.minimized}
           onFocus={() => bringToFront(window.id)}
           onClose={() => closeWindow(window.id)}
+          onMinimize={() => minimizeWindow(window.id)}
         >
           {window.content}
         </Window>

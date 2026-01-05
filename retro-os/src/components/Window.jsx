@@ -1,7 +1,17 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Window.css";
 
-export default function Window({ title, children, onClose, position, zIndex, onFocus}) {
+export default function Window({ 
+    title, 
+    children, 
+    onClose, 
+    position, 
+    zIndex, 
+    onFocus,
+    onMinimize,
+    minimized
+    }) {
+
     const WindowRef = useRef();
     const [pos, setPos] = useState(position);
     const [dragging, setDragging] = useState(false);
@@ -50,7 +60,10 @@ export default function Window({ title, children, onClose, position, zIndex, onF
         };
     }, [dragging]);
 
+    if (minimized) return null;
+
     return (
+       
         <div
             className="window"
             style={{
@@ -62,6 +75,7 @@ export default function Window({ title, children, onClose, position, zIndex, onF
         >
             <div className="window-titlebar" onMouseDown={(e) => {onMouseDown(e); onFocus();}}>
                 <span>{title}</span>
+                <button className="window-minimize" onClick={onMinimize}>-</button>
                 <button className="window-close" onClick={onClose}>x</button>
             </div>
 
