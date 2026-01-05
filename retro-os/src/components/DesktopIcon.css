@@ -1,0 +1,17 @@
+.desktop-icon {
+  width: 80px;
+  text-align: center;
+  margin: 20px;
+  cursor: default;
+}
+
+.desktop-icon-img {
+  width: 48px;
+  height: 48px;
+}
+
+.desktop-icon-label {
+  color: white;
+  font-size: 14px;
+  margin-top: 5px;
+}

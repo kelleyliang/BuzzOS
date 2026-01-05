@@ -1,0 +1,18 @@
+.desktop {
+  width: 100vw; /* this is full screen width*/
+  height: 100vh;
+  background-image: url("/src/assets/wallpaper.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+.mascot {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 120px;
+  opacity: 0.95;
+}
