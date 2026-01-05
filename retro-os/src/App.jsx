@@ -46,6 +46,7 @@ function App() {
         title,
         content,
         position: { x: 100, y: 100 },
+        size: {width: 300, height: 200 },
         zIndex: prev.length + 1, // new window on top
         minimized: false,
         maximized: false,
@@ -55,6 +56,14 @@ function App() {
     ]);
 
     setActiveWindowId(id);
+  }
+
+  function updateWindowSize(id, newSize) {
+    setWindows(prev => 
+      prev.map(w=>
+        w.id === id ? { ...w, size: newSize} : w
+      )
+    );
   }
 
   function updateWindowPosition(id, newPos) {
@@ -85,7 +94,7 @@ function App() {
             ...w,
             maximized:false,
             position: w.prevMaximizePosition,
-            prevPosition: null
+            prevMaximizePosition: null
           };
         }
       })
@@ -165,6 +174,7 @@ function App() {
           id ={window.id}
           title={window.title}
           position={window.position}
+          size={window.size}
           zIndex={window.zIndex}
           minimized={window.minimized}
           maximized={window.maximized}
@@ -174,6 +184,7 @@ function App() {
           onMinimize={() => minimizeWindow(window.id)}
           onMaximize={() => toggleMaximize(window.id)}
           onMove={(pos) => updateWindowPosition(window.id, pos)}
+          onResize={(newSize) => updateWindowSize(window.id, newSize)}
         >
           {window.content}
         </Window>

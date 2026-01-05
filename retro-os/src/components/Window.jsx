@@ -7,19 +7,18 @@ export default function Window({
     isActive,
     onClose, 
     position, 
-
+    size,
 
     onMove,
     zIndex, 
     onFocus,
     onMinimize,
     onMaximize,
+    onResize,
 
     minimized,
-    maximized,
+    maximized
 
-    prevMaximizePosition, // before maximize
-    prevMinimizePosition // before minimalize
     }) {
 
     const WindowRef = useRef();
@@ -28,6 +27,8 @@ export default function Window({
     const [pos, setPos] = useState(position);
     const [dragging, setDragging] = useState(false);
     const offset = useRef({ x: 0, y: 0 });
+
+    const resizing = useRef(null); // right, bottom, corner
 
     // dragging is true when mouse is clicking down
     function onMouseDown(e) {
@@ -46,14 +47,51 @@ export default function Window({
     // smooth dragging using global mousemove
     useEffect(() => {
         function handleMouseMove(e) {
+            // RESIZING LOGIC
+            if (resizing.current) {
+                const minWidth = 200;
+                const minHeight = 120;
+                
+                const TASKBAR_HEIGHT = 40;
+
+                const maxWidth = window.innerWidth - size.width;
+                const maxHeight = window.innerHeight - TASKBAR_HEIGHT - size.height;
+                
+                let newWidth = size.width;
+                let newHeight = size.height;
+
+                if (resizing.current === "right" || resizing.current === "corner") {
+                    const rawWidth = e.clientX - pos.x
+                    newWidth = Math.min(
+                        maxWidth, 
+                        Math.max(minWidth, rawWidth)
+                    );
+                }
+
+                if (resizing.current === "bottom" || resizing.current === "corner") {
+                    const rawHeight = e.clientY - pos.y
+                    newHeight = Math.min(
+                        maxHeight,
+                        Math.max(minHeight, rawHeight)
+                    );
+                }
+
+                onResize({width: newWidth, height: newHeight}) ;
+                
+                // NO DRAG WHEN RESIZING IS HAPPENNING
+                return;      
+            }
+
+
+            // DRAG LOGIC
             if (!dragging || maximized) return;
             let newX = e.clientX - offset.current.x;
             let newY = e.clientY - offset.current.y;
 
             // clamp values so window stays in viewport
             if (!maximized) {
-                const maxX = window.innerWidth - 300;  // 300px = window width
-                const maxY = window.innerHeight - 200; // adjust based on your window height
+                const maxX = window.innerWidth - size.width;
+                const maxY = window.innerHeight - size.height;
 
                 if (newX < 0) newX = 0;
                 if (newY < 0) newY = 0;
@@ -71,6 +109,7 @@ export default function Window({
             if (dragging) {
                 setDragging(false);
             }
+            resizing.current = null;
         }
 
         document.addEventListener("mousemove", handleMouseMove);
@@ -80,7 +119,7 @@ export default function Window({
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
         };
-    }, [dragging, maximized]);
+    }, [dragging, maximized, size, pos]);
 
     if (minimized) return null;
     
@@ -94,6 +133,8 @@ export default function Window({
             style={{
                 top: pos.y,
                 left: pos.x,
+                width: size.width,
+                height: size.height,
                 zIndex: zIndex
             }}
             onMouseDown={onFocus}
@@ -138,6 +179,35 @@ export default function Window({
             <div className="window-content">
                 {children}
             </div>
+
+            <div
+                className="resize-handle resize-right"
+                onMouseDown={() => {
+                    if (maximized) return;
+                    setDragging(false);
+                    resizing.current = "right";
+
+                }}
+            />
+
+            <div
+                className="resize-handle resize-bottom"
+                onMouseDown={() => {
+                    if (maximized) return;
+                    setDragging(false);
+                    resizing.current = "bottom";
+                }}
+            />
+
+            <div
+                className="resize-handle resize-corner"
+                onMouseDown={() => {
+                    if (maximized) return;
+                    setDragging(false);
+                    resizing.current = "corner";
+                }}
+            />
+
         </div>
     );
 }
