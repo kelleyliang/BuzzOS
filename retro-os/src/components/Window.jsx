@@ -23,6 +23,7 @@ export default function Window({
 
     const WindowRef = useRef();
     const lastClickTime = useRef(0);
+    const clickTimeout = useRef(null);
 
     const [pos, setPos] = useState(position);
     const [dragging, setDragging] = useState(false);
@@ -30,15 +31,9 @@ export default function Window({
 
     const resizing = useRef(null); // right, bottom, corner
 
-    // dragging is true when mouse is clicking down
-    function onMouseDown(e) {
-        if (maximized) return; // no dragging when window maximized
-        setDragging(true);
-        offset.current = {
-            x: e.clientX - pos.x,
-            y: e.clientY - pos.y
-        };
-    }
+    const mouseDown = useRef(false);
+    const dragStart = useRef({ x: 0, y: 0 });
+
 
     useEffect(() => {
         setPos(position);
@@ -47,6 +42,20 @@ export default function Window({
     // smooth dragging using global mousemove
     useEffect(() => {
         function handleMouseMove(e) {
+            // START DRAG ONLY AFTER MOVEMENT
+            if (mouseDown.current && !dragging) {
+                const dx = Math.abs(e.clientX - dragStart.current.x);
+                const dy = Math.abs(e.clientY - dragStart.current.y);
+
+                const DRAG_THRESHOLD = 4;
+
+                if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
+                    setDragging(true);
+                } else {
+                    return;
+                }
+            }
+
             // RESIZING LOGIC
             if (resizing.current) {
                 const minWidth = 200;
@@ -54,8 +63,8 @@ export default function Window({
                 
                 const TASKBAR_HEIGHT = 40;
 
-                const maxWidth = window.innerWidth - size.width;
-                const maxHeight = window.innerHeight - TASKBAR_HEIGHT - size.height;
+                const maxWidth = window.innerWidth - pos.x;
+                const maxHeight = window.innerHeight - TASKBAR_HEIGHT - pos.y;
                 
                 let newWidth = size.width;
                 let newHeight = size.height;
@@ -90,8 +99,10 @@ export default function Window({
 
             // clamp values so window stays in viewport
             if (!maximized) {
+                const TASKBAR_HEIGHT = 40;
+
                 const maxX = window.innerWidth - size.width;
-                const maxY = window.innerHeight - size.height;
+                const maxY = window.innerHeight - TASKBAR_HEIGHT - size.height;
 
                 if (newX < 0) newX = 0;
                 if (newY < 0) newY = 0;
@@ -105,10 +116,8 @@ export default function Window({
 
         // when mouse is not clicking down on track, drag is false
         function handleMouseUp() {
-            // if check for no stale renentries, have to check not sure
-            if (dragging) {
-                setDragging(false);
-            }
+            mouseDown.current = false;
+            setDragging(false);
             resizing.current = null;
         }
 
@@ -142,28 +151,33 @@ export default function Window({
             <div 
                 className="window-titlebar" 
                 onMouseDown={(e) => {
-                    onFocus();
-                    const now = Date.now();
-                    const DOUBLE_CLICK_DELAY = 250;
-                    
-                    // double click = maximize
-                    if (now - lastClickTime.current < DOUBLE_CLICK_DELAY) {
-                        lastClickTime.current = 0;
-                        setDragging(false); // cancel drag, maximize
-                        onMaximize();
-                        return;
-                    }
-                    // else this is a single click
-                    lastClickTime.current = now;
+                onFocus();
 
-                    if (!maximized) {
-                        setDragging(true);
-                        offset.current = {
-                            x: e.clientX - pos.x,
-                            y: e.clientY - pos.y
-                        };
-                    }
+                const now = Date.now();
+                const DOUBLE_CLICK_DELAY = 250;
+
+                // DOUBLE CLICK → MAXIMIZE
+                if (now - lastClickTime.current < DOUBLE_CLICK_DELAY) {
+                    lastClickTime.current = 0;
+                    setDragging(false);
+                    mouseDown.current = false;
+                    onMaximize();
+                    return;
+                }
+
+                lastClickTime.current = now;
+
+                // single click → potential drag
+                if (!maximized) {
+                    mouseDown.current = true;
+                    dragStart.current = { x: e.clientX, y: e.clientY };
+                    offset.current = {
+                    x: e.clientX - pos.x,
+                    y: e.clientY - pos.y
+                    };
+                }
                 }}
+
             >
                 <span>{title}</span>
                 <div className="window-controls">
@@ -182,7 +196,8 @@ export default function Window({
 
             <div
                 className="resize-handle resize-right"
-                onMouseDown={() => {
+                onMouseDown={(e) => {
+                    e.preventDefault();
                     if (maximized) return;
                     setDragging(false);
                     resizing.current = "right";
@@ -192,7 +207,8 @@ export default function Window({
 
             <div
                 className="resize-handle resize-bottom"
-                onMouseDown={() => {
+                onMouseDown={(e) => {
+                    e.preventDefault();
                     if (maximized) return;
                     setDragging(false);
                     resizing.current = "bottom";
@@ -201,7 +217,8 @@ export default function Window({
 
             <div
                 className="resize-handle resize-corner"
-                onMouseDown={() => {
+                onMouseDown={(e) => {
+                    e.preventDefault();
                     if (maximized) return;
                     setDragging(false);
                     resizing.current = "corner";

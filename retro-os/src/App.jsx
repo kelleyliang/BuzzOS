@@ -39,21 +39,24 @@ function App() {
       setActiveWindowId(id); // sets the recent opened to active
       return;
     }
-    setWindows(prev => [
-      ...prev,
-      {
-        id,
-        title,
-        content,
-        position: { x: 100, y: 100 },
-        size: {width: 300, height: 200 },
-        zIndex: prev.length + 1, // new window on top
-        minimized: false,
-        maximized: false,
-        prevMaximizePosition: null,
-        prevMinimizePosition: null
-      }
-    ]);
+    setWindows(prev => {
+      const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
+      return [
+        ...prev,
+        {
+          id,
+          title,
+          content,
+          position: { x: 100, y: 100 },
+          size: {width: 300, height: 200 },
+          zIndex: maxZ + 1, // new window on top
+          minimized: false,
+          maximized: false,
+          prevMaximizePosition: null,
+          prevMinimizePosition: null
+        }
+      ];
+    });
 
     setActiveWindowId(id);
   }
