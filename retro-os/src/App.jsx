@@ -17,6 +17,7 @@ function App() {
     // case 1: minimized -> restore and focus
     if (window.minimized) {
       restoreWindow(id);
+      activateWindow(id);
       return;
     }
 
@@ -27,16 +28,14 @@ function App() {
     }
 
     // case 3: inactive -> bring to fron and focus
-    bringToFront(id)
-    setActiveWindowId(id)
+    activateWindow(id);
   }
 
   // WINDOW FUNCTIONS
   function openWindow(id, title, content, options = {}) {
     // If already open, do nothing (later we bring to front)
     if (windows.some(w => w.id === id)) {
-      bringToFront(id)
-      setActiveWindowId(id); // sets the recent opened to active
+      activateWindow(id);
       return;
     }
     const baseWidth = 300;
@@ -65,8 +64,20 @@ function App() {
         }
       ];
     });
+    activateWindow(id)
+  }
 
+  function activateWindow(id) {
     setActiveWindowId(id);
+
+    setWindows(prev => {
+      const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
+
+      return prev.map(w=>
+        w.id === id? { ...w, zIndex: maxZ + 1} // this window goes on top
+        : w
+      );
+    });
   }
 
   function updateWindowSize(id, newSize) {
@@ -133,25 +144,16 @@ function App() {
           : w
       )
     );
-    setActiveWindowId(id);
-    bringToFront(id);
+    activateWindow(id);
   }
 
-  function bringToFront(id) {
-    setActiveWindowId(id);
 
-    setWindows(prev => {
-      const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
-
-      return prev.map(w=>
-        w.id === id? { ...w, zIndex: maxZ + 1} // this window goes on top
-        : w
-      );
-    });
-  }
 
   function closeWindow(id) {
     setWindows(prev => prev.filter(w => w.id !== id));
+    if (activeWindowId === id) {
+      setActiveWindowId(null);
+    }
   }
 
   // what we return, actual rendering occurs
@@ -205,7 +207,7 @@ function App() {
           minimized={window.minimized}
           maximized={window.maximized}
           isActive={activeWindowId === window.id}
-          onFocus={() => bringToFront(window.id)}
+          onFocus={() => activateWindow(window.id)}
           onClose={() => closeWindow(window.id)}
           onMinimize={() => minimizeWindow(window.id)}
           onMaximize={() => toggleMaximize(window.id)}

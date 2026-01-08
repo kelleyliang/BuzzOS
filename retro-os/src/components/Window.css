@@ -21,17 +21,26 @@
   background: navy;
   color: white;
   padding: 4px;
-  cursor: move;
+  cursor: grab;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.window-titlebar:active {
+  cursor: grabbing;
+}
+
 .window-controls {
   display: flex;
   align-items: center;
 }
+
+.window.inactive .window-titlebar {
+  cursor: default;
+}
+
 
 /* =========================
    BASE CONTROL ICONS
