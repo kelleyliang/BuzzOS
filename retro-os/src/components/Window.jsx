@@ -8,6 +8,7 @@ export default function Window({
     onClose, 
     position, 
     size,
+    aspectRatio,
 
     onMove,
     zIndex, 
@@ -58,10 +59,19 @@ export default function Window({
 
             // RESIZING LOGIC
             if (resizing.current) {
-                const minWidth = 200;
-                const minHeight = 120;
-                
+            
                 const TASKBAR_HEIGHT = 40;
+                const TITLEBAR_HEIGHT = 32;
+                const MIN_CONTENT_SIZE = 200;
+
+                const minContentWidth = MIN_CONTENT_SIZE;
+                const minContentHeight = aspectRatio
+                ? Math.round(minContentWidth / aspectRatio)
+                : 120;
+
+                const minWidth = minContentWidth;
+                const minHeight = minContentHeight + TITLEBAR_HEIGHT;
+
 
                 const maxWidth = window.innerWidth - pos.x;
                 const maxHeight = window.innerHeight - TASKBAR_HEIGHT - pos.y;
@@ -71,17 +81,61 @@ export default function Window({
 
                 if (resizing.current === "right" || resizing.current === "corner") {
                     const rawWidth = e.clientX - pos.x
-                    newWidth = Math.min(
-                        maxWidth, 
-                        Math.max(minWidth, rawWidth)
-                    );
+                    // width is varying, height follows
+                    if (aspectRatio) {
+                        const maxWidthByHeight =
+                            (maxHeight - TITLEBAR_HEIGHT) * aspectRatio;
+                        
+                        newWidth = Math.min(
+                            maxWidth,
+                            maxWidthByHeight,
+                            Math.max(minWidth, rawWidth)
+                        );
+                                            
+                        newHeight = 
+                            Math.round(newWidth / aspectRatio) + TITLEBAR_HEIGHT;
+                    } else {
+                        newWidth = Math.min(
+                            maxWidth, 
+                            Math.max(minWidth, rawWidth)
+                        );
+                    }
+                    
                 }
 
-                if (resizing.current === "bottom" || resizing.current === "corner") {
-                    const rawHeight = e.clientY - pos.y
-                    newHeight = Math.min(
+                if (resizing.current === "bottom") {
+                    const rawHeight = e.clientY - pos.y;
+
+                    if (aspectRatio) {
+                        const maxHeightByWidth =
+                        Math.round(maxWidth / aspectRatio) + TITLEBAR_HEIGHT;
+
+                        newHeight = Math.min(
+                        maxHeight,
+                        maxHeightByWidth,
+                        Math.max(minHeight, rawHeight)
+                        );
+
+                        newWidth =
+                        Math.round((newHeight - TITLEBAR_HEIGHT) * aspectRatio);
+                    } else {
+                        newHeight = Math.min(
                         maxHeight,
                         Math.max(minHeight, rawHeight)
+                        );
+                    }
+                }
+
+                // FINAL SAFETY CLAMP for when there is no aspectRatio
+                if (!aspectRatio) {
+                    newWidth = Math.min(
+                        maxWidth,
+                        Math.max(minWidth, newWidth)
+                    );
+
+                    newHeight = Math.min(
+                        maxHeight,
+                        Math.max(minHeight, newHeight)
                     );
                 }
 

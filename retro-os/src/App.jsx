@@ -32,13 +32,17 @@ function App() {
   }
 
   // WINDOW FUNCTIONS
-  function openWindow(id, title, content) {
+  function openWindow(id, title, content, options = {}) {
     // If already open, do nothing (later we bring to front)
     if (windows.some(w => w.id === id)) {
       bringToFront(id)
       setActiveWindowId(id); // sets the recent opened to active
       return;
     }
+    const baseWidth = 300;
+    const aspectRatio = options?.aspectRatio ?? null;
+
+    // creating a new window object 
     setWindows(prev => {
       const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
       return [
@@ -48,12 +52,15 @@ function App() {
           title,
           content,
           position: { x: 100, y: 100 },
-          size: {width: 300, height: 200 },
+          size: aspectRatio
+            ? {width: baseWidth, height: Math.round(baseWidth/aspectRatio)}
+            : {width: 300, height: 200 },
           zIndex: maxZ + 1, // new window on top
           minimized: false,
           maximized: false,
           prevMaximizePosition: null,
-          prevMinimizePosition: null
+          prevMinimizePosition: null,
+          aspectRatio: options.aspectRatio ?? null
         }
       ];
     });
@@ -146,6 +153,7 @@ function App() {
     setWindows(prev => prev.filter(w => w.id !== id));
   }
 
+  // what we return, actual rendering occurs
   return (
     <Desktop>
       {/* TASKBAR */}
@@ -166,7 +174,21 @@ function App() {
         icon={folderIcon}
         label="Snake"
         onDoubleClick={() =>
-          openWindow("snake", "Snake Game", <p>Snake will go here.</p>)
+          openWindow(
+            "snake", 
+            "Snake Game", <p>Snake will go here.</p>)
+        }
+      />
+      <DesktopIcon
+        icon={folderIcon}
+        label="Square Demo"
+        onDoubleClick={() =>
+          openWindow(
+            "square",
+            "Square Window",
+            <div style={{ background: "#333", height: "100%" }} />,
+            { aspectRatio: 1 }
+          )
         }
       />
 
@@ -187,6 +209,7 @@ function App() {
           onMinimize={() => minimizeWindow(window.id)}
           onMaximize={() => toggleMaximize(window.id)}
           onMove={(pos) => updateWindowPosition(window.id, pos)}
+          aspectRatio={window.aspectRatio}
           onResize={(newSize) => updateWindowSize(window.id, newSize)}
         >
           {window.content}
