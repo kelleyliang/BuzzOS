@@ -200,6 +200,7 @@
   background: #e0e0e0;
   flex: 1;
   overflow: auto;
+  height: calc(100% - 32px);
 }
 
 /* =========================

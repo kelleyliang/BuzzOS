@@ -41,6 +41,7 @@ function App() {
     }
     const baseWidth = 300;
     const aspectRatio = options?.aspectRatio ?? null;
+    const TITLEBAR_HEIGHT = 32;
 
     // creating a new window object 
     setWindows(prev => {
@@ -53,7 +54,7 @@ function App() {
           content,
           position: { x: 100, y: 100 },
           size: aspectRatio
-            ? {width: baseWidth, height: Math.round(baseWidth/aspectRatio)}
+            ? {width: baseWidth, height: Math.round(baseWidth/aspectRatio) + TITLEBAR_HEIGHT}
             : {width: 300, height: 200 },
           zIndex: maxZ + 1, // new window on top
           minimized: false,

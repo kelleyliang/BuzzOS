@@ -66,8 +66,8 @@ export default function Window({
 
                 const minContentWidth = MIN_CONTENT_SIZE;
                 const minContentHeight = aspectRatio
-                ? Math.round(minContentWidth / aspectRatio)
-                : 120;
+                    ? Math.round(minContentWidth / aspectRatio)
+                    : 120;
 
                 const minWidth = minContentWidth;
                 const minHeight = minContentHeight + TITLEBAR_HEIGHT;
@@ -76,10 +76,17 @@ export default function Window({
                 const maxWidth = window.innerWidth - pos.x;
                 const maxHeight = window.innerHeight - TASKBAR_HEIGHT - pos.y;
                 
+                const isWidthDriven = 
+                    resizing.current === "right" ||
+                    resizing.current === "corner";
+                const isHeightDriven = 
+                    resizing.current === "bottom" ||
+                    (resizing.current === "corner" && !aspectRatio);
+                
                 let newWidth = size.width;
                 let newHeight = size.height;
 
-                if (resizing.current === "right" || resizing.current === "corner") {
+                if (isWidthDriven) {
                     const rawWidth = e.clientX - pos.x
                     // width is varying, height follows
                     if (aspectRatio) {
@@ -103,7 +110,7 @@ export default function Window({
                     
                 }
 
-                if (resizing.current === "bottom") {
+                if (isHeightDriven) {
                     const rawHeight = e.clientY - pos.y;
 
                     if (aspectRatio) {
@@ -248,36 +255,43 @@ export default function Window({
                 {children}
             </div>
 
-            <div
-                className="resize-handle resize-right"
-                onMouseDown={(e) => {
-                    e.preventDefault();
-                    if (maximized) return;
-                    setDragging(false);
-                    resizing.current = "right";
+        {/* RIGHT RESIZE */}
+        {!aspectRatio && (
+        <div
+            className="resize-handle resize-right"
+            onMouseDown={(e) => {
+            e.preventDefault();
+            if (maximized) return;
+            setDragging(false);
+            resizing.current = "right";
+            }}
+        />
+        )}
 
-                }}
-            />
+        {/* BOTTOM RESIZE */}
+        {!aspectRatio && (
+        <div
+            className="resize-handle resize-bottom"
+            onMouseDown={(e) => {
+            e.preventDefault();
+            if (maximized) return;
+            setDragging(false);
+            resizing.current = "bottom";
+            }}
+        />
+        )}
 
-            <div
-                className="resize-handle resize-bottom"
-                onMouseDown={(e) => {
-                    e.preventDefault();
-                    if (maximized) return;
-                    setDragging(false);
-                    resizing.current = "bottom";
-                }}
-            />
+        {/* CORNER RESIZE (always allowed) */}
+        <div
+        className="resize-handle resize-corner"
+        onMouseDown={(e) => {
+            e.preventDefault();
+            if (maximized) return;
+            setDragging(false);
+            resizing.current = "corner";
+        }}
+        />
 
-            <div
-                className="resize-handle resize-corner"
-                onMouseDown={(e) => {
-                    e.preventDefault();
-                    if (maximized) return;
-                    setDragging(false);
-                    resizing.current = "corner";
-                }}
-            />
 
         </div>
     );
