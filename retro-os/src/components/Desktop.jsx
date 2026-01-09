@@ -9,10 +9,6 @@ export default function Desktop({children}) {
             {/* children includes whatever you put in the tag when using
             the Desktop components in app*/} 
             {children}
-        <img
-        src="/src/assets/buzz.png"
-        className="mascot"
-        />
         </div>
     );
 }
