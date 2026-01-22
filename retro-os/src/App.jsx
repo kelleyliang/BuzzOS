@@ -4,10 +4,25 @@ import DesktopIcon from "./components/DesktopIcon";
 import Window from "./components/Window";
 import folderIcon from "./assets/folder.png";
 import Taskbar from "./components/Taskbar";
+import AboutMe from "./components/AboutMe";
+
+// APPLICATIONS
+import Pomodoro from "./components/Pomodoro";
+
 
 function App() {
+  // defined hooks
   const [windows, setWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
+
+  // constants
+  const POMODORO_BASE_WIDTH = 320;
+  const POMODORO_BASE_HEIGHT = 220;
+
+  const BASE_WIDTH = 300;
+  const BASE_HEIGHT = 220;
+  const MAX_SCALE = 2;
+
 
   // TASKBAR ACTIONS
   function handleTaskBarClick(id) {
@@ -38,7 +53,7 @@ function App() {
       activateWindow(id);
       return;
     }
-    const baseWidth = 300;
+    const baseWidth = options.baseWidth ?? 300;
     const aspectRatio = options?.aspectRatio ?? null;
     const TITLEBAR_HEIGHT = 32;
 
@@ -156,6 +171,9 @@ function App() {
     }
   }
 
+ 
+
+
   // what we return, actual rendering occurs
   return (
     <Desktop>
@@ -195,8 +213,48 @@ function App() {
         }
       />
 
+      <DesktopIcon
+        icon={folderIcon}
+        label="Pomodoro"
+        onDoubleClick={() =>
+          openWindow(
+            "pomodoro",
+            "Pomodoro Timer",
+            <Pomodoro/>,
+            {aspectRatio: POMODORO_BASE_WIDTH / POMODORO_BASE_HEIGHT,
+              baseWidth: 320
+            }
+            
+          )
+        }
+      />
+      <DesktopIcon
+        icon={folderIcon}
+        label="About"
+        onDoubleClick={() =>
+          openWindow(
+            "about",
+            "About BuzzOS",
+            <AboutMe />,
+            { baseWidth: 360 }
+          )
+        }
+      />
+
+
       {/* WINDOWS */}
-      {windows.map(window => (
+      {windows.map(window => {
+        const windowMetrics = {
+        width: window.size.width,
+        height: window.size.height,
+        scale: Math.min(
+          window.size.width / BASE_WIDTH,
+          window.size.height / BASE_HEIGHT,
+          MAX_SCALE
+        )
+      };
+      
+      return (
         <Window
           key={window.id}
           id ={window.id}
@@ -215,9 +273,12 @@ function App() {
           aspectRatio={window.aspectRatio}
           onResize={(newSize) => updateWindowSize(window.id, newSize)}
         >
-          {window.content}
+          {React.isValidElement(window.content)
+            ? React.cloneElement(window.content, { windowMetrics })
+            : window.content}
         </Window>
-      ))}
+      );
+    })}
 
     </Desktop>
   );

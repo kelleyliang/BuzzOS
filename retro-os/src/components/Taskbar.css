@@ -16,8 +16,8 @@
 .taskbar-left {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-right: 8px;
+  gap: 8px;
+  margin-right: 6px;
 }
 
 
@@ -43,6 +43,8 @@
   width: 32px;
 
   image-rendering: pixelated;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 
