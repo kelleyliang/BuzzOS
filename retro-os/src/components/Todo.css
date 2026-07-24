@@ -1,0 +1,49 @@
+.todo {
+  padding: 12px;
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+}
+
+.todo-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.todo-input-row input {
+  flex: 1;
+  padding: 6px;
+  border: 2px inset #ccc;
+  font-family: inherit;
+}
+
+.todo-input-row button {
+  background: #e0e0e0;
+  border: 2px solid black;
+  box-shadow: inset -2px -2px 0 #808080,
+              inset 2px 2px 0 #ffffff;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.todo-input-row button:active {
+  box-shadow: inset 2px 2px 0 #808080,
+              inset -2px -2px 0 #ffffff;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding: 4px;
+  background: #f4f4f4;
+  border: 1px solid #aaa;
+}
+
+.todo-item span {
+  cursor: pointer;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}

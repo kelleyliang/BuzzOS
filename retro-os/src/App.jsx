@@ -5,6 +5,8 @@ import Window from "./components/Window";
 import folderIcon from "./assets/folder.png";
 import Taskbar from "./components/Taskbar";
 import AboutMe from "./components/AboutMe";
+import Todo from "./components/Todo";
+
 
 // APPLICATIONS
 import Pomodoro from "./components/Pomodoro";
@@ -185,10 +187,62 @@ function App() {
       />
 
       {/* ICONS */}
+
+      <DesktopIcon
+        icon={folderIcon}
+        label="To Do"
+        onDoubleClick={() => openWindow("to do", "Work in progress",
+          <ul>
+            <li>MVP
+              <ul>
+                <li>Fix bugs</li>
+                <li>One game</li>
+              </ul>
+            </li>
+
+            <li>Bugs
+              <ul>
+                <li>Fix time when its :0#</li>
+                <li>Dynamic sizing, fixed ratios, proper initial render</li>
+                <li>pomodoro timer resets when minimzed</li>
+              </ul>
+            </li>
+            
+            <li>Add different APPLICATIONS
+              <ul>
+                <li>tic tac toe</li>
+                <li>snake</li>
+                <li>notes</li>
+                <li>paint</li>
+              </ul>
+            </li>
+
+            <li>Additional
+              <ul>
+                <li>Buzz loading page</li>
+                <li>Menu</li>
+                <li>buzz errors</li>
+                <li>different pomo options</li>
+              </ul>
+            </li>
+        
+            
+            <li>Graphics
+              <ul>
+                <li>buzz</li>
+                <li>give image credits</li>
+
+              </ul>
+            </li>
+
+          </ul>
+          )}
+      />
+
       <DesktopIcon
         icon={folderIcon}
         label="Notes"
-        onDoubleClick={() => openWindow("notes", "Notes App", <p>Notes go here.</p>)}
+        onDoubleClick={() => openWindow("notes", "Notes", <p>Notes go here.</p>)}
       />
 
       <DesktopIcon
@@ -240,6 +294,19 @@ function App() {
           )
         }
       />
+      <DesktopIcon
+        icon={folderIcon}
+        label="Todo"
+        onDoubleClick={() =>
+          openWindow(
+            "todo",
+            "Todo List",
+            <Todo />,
+            { baseWidth: 360 }
+          )
+        }
+      />
+
 
 
       {/* WINDOWS */}
