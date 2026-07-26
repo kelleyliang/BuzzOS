@@ -10,6 +10,7 @@ import Todo from "./components/Todo";
 
 // APPLICATIONS
 import Pomodoro from "./components/Pomodoro";
+import Snake from "./components/Snake";
 
 
 function App() {
@@ -59,7 +60,17 @@ function App() {
     const aspectRatio = options?.aspectRatio ?? null;
     const TITLEBAR_HEIGHT = 32;
 
-    // creating a new window object 
+    const width = aspectRatio
+      ? baseWidth
+      : 300;
+    const height = aspectRatio
+      ? Math.round(baseWidth / aspectRatio) + TITLEBAR_HEIGHT
+      : 200;
+
+    const TASKBAR_HEIGHT = 40;
+    const x = Math.round((window.innerWidth - width) / 2);
+    const y = Math.round((window.innerHeight - TASKBAR_HEIGHT - height) / 2);
+
     setWindows(prev => {
       const maxZ = Math.max(...prev.map(w => w.zIndex), 0);
       return [
@@ -68,11 +79,9 @@ function App() {
           id,
           title,
           content,
-          position: { x: 100, y: 100 },
-          size: aspectRatio
-            ? {width: baseWidth, height: Math.round(baseWidth/aspectRatio) + TITLEBAR_HEIGHT}
-            : {width: 300, height: 200 },
-          zIndex: maxZ + 1, // new window on top
+          position: { x, y },
+          size: { width, height },
+          zIndex: maxZ + 1,
           minimized: false,
           maximized: false,
           prevMaximizePosition: null,
@@ -187,7 +196,7 @@ function App() {
       />
 
       {/* ICONS */}
-
+      <div className="desktop-icons">
       <DesktopIcon
         icon={folderIcon}
         label="To Do"
@@ -250,8 +259,11 @@ function App() {
         label="Snake"
         onDoubleClick={() =>
           openWindow(
-            "snake", 
-            "Snake Game", <p>Snake will go here.</p>)
+            "snake",
+            "Snake",
+            <Snake />,
+            { aspectRatio: 4 / 3, baseWidth: 500 }
+          )
         }
       />
       <DesktopIcon
@@ -306,8 +318,7 @@ function App() {
           )
         }
       />
-
-
+      </div>
 
       {/* WINDOWS */}
       {windows.map(window => {

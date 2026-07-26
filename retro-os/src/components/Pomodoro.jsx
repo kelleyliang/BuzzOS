@@ -47,7 +47,7 @@ export default function Pomodoro( {windowMetrics} ) {
             <div 
                 className="pomodoro-inner"
                 style={{
-                    transform: `scale(${windowMetrics})`,
+                    transform: `scale(${windowMetrics.scale})`,
                     transformOrigin: "top center"
                 }}
             > 

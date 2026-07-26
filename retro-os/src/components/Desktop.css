@@ -1,5 +1,5 @@
 .desktop {
-  width: 100vw; /* this is full screen width*/
+  width: 100vw;
   height: 100vh;
   background-image: url("/src/assets/wallpaper.png");
   background-size: cover;
@@ -7,6 +7,18 @@
   overflow: hidden;
   position: relative;
   user-select: none;
+}
+
+.desktop-icons {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
 }
 
 .mascot {

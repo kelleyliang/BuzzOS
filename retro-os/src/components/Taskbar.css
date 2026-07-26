@@ -7,65 +7,73 @@
   background: #c0c0c0;
   display: flex;
   align-items: center;
-  border-top: 2px solid black;
-  padding: 4px;
+  border-top: 2px solid #ffffff;
+  padding: 3px 4px;
   box-sizing: border-box;
+  z-index: 9999;
 }
 
-/* LEFT SYSTEM AREA */
+/* LEFT: Buzz icon */
 .taskbar-left {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-right: 6px;
+  padding-right: 6px;
+  margin-right: 4px;
+  border-right: 1px solid #808080;
 }
 
-
-.taskbar-tray {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 0px 6px;
-
-  background: #c0c0c0;
-
-  /* tray-style bevel */
-  border-top: 2px solid #ffffff;
-  border-left: 2px solid #ffffff;
-  border-right: 2px solid #404040;
-  border-bottom: 2px solid #404040;
-}
-
-/* Mascot */
 .taskbar-buzz {
-  height: 32px;
-  width: 32px;
-
+  height: 28px;
+  width: 28px;
   image-rendering: pixelated;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-
-
-/* WINDOW BUTTONS */
+/* MIDDLE: Window buttons */
 .taskbar-windows {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   flex: 1;
+  overflow: hidden;
 }
 
 .taskbar-item {
-  background: #e0e0e0;
-  border: 1px solid black;
-  padding: 4px 10px;
+  background: #c0c0c0;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  padding: 3px 12px;
   cursor: pointer;
-  font-size: 14px;
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskbar-item:active {
+  border-top: 2px solid #404040;
+  border-left: 2px solid #404040;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
 .taskbar-item.active {
-  background: #ffffff;
-  border: 2px solid black;
+  background: #dfdfdf;
+  border-top: 2px solid #404040;
+  border-left: 2px solid #404040;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
+/* RIGHT: Clock tray */
+.taskbar-right {
+  margin-left: auto;
+  padding-left: 6px;
+  border-left: 1px solid #808080;
+}

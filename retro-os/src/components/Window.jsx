@@ -191,13 +191,10 @@ export default function Window({
         };
     }, [dragging, maximized, size, pos]);
 
-    if (minimized) return null;
-    
-    // adding it correctly here?
     if (!pos) return null;
 
     return (
-       
+
         <div
             className={`window ${maximized ? "maximized": ""} ${isActive ? "active" : "inactive"}`}
             style={{
@@ -205,7 +202,8 @@ export default function Window({
                 left: pos.x,
                 width: size.width,
                 height: size.height,
-                zIndex: zIndex
+                zIndex: zIndex,
+                display: minimized ? "none" : undefined
             }}
             onMouseDown={onFocus}
         >

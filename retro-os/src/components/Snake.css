@@ -1,0 +1,109 @@
+.snake {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  background: #2d2d2d;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+/* Loading screen */
+.snake-loading {
+  background: #1a1a1a;
+  justify-content: center;
+}
+
+.snake-loading-text {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #00ff00;
+  margin-bottom: 12px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.snake-loading-sub {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 14px;
+  color: #66ff66;
+  animation: blink 0.8s step-end infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Header */
+.snake-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+  margin-bottom: 4px;
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #00ff00;
+  flex-shrink: 0;
+  height: 24px;
+  align-items: center;
+}
+
+/* Board */
+.snake-board-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.snake-canvas {
+  border: 2px solid #00ff00;
+  background: #1a1a1a;
+  display: block;
+}
+
+/* Overlays */
+.snake-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.snake-overlay-title {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #00ff00;
+  margin-bottom: 8px;
+}
+
+.snake-overlay-score {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 16px;
+  color: #ffcc00;
+  margin-bottom: 8px;
+}
+
+.snake-overlay-sub {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-size: 13px;
+  color: #aaffaa;
+}

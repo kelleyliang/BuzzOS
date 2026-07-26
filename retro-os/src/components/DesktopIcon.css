@@ -1,8 +1,13 @@
 .desktop-icon {
   width: 80px;
   text-align: center;
-  margin: 20px;
+  padding: 6px 4px;
   cursor: default;
+  border-radius: 4px;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .desktop-icon-img {

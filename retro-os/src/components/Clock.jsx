@@ -16,9 +16,7 @@ export default function Clock() {
     hour12: true
   }).replace(/ AM| PM/, "");
 
-  const minutes = time.toLocaleTimeString([], {
-    minute: "2-digit"
-  });
+  const minutes = String(time.getMinutes()).padStart(2, "0");
 
   const ampm = time.getHours() >= 12 ? "PM" : "AM";
   const showColon = time.getSeconds() % 2 === 0;
