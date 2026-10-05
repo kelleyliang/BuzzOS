@@ -1,59 +1,14 @@
+import buzz from "../assets/buzz.png";
+import "./Journal.css";
+
 export default function AboutMe() {
   return (
-    <div
-      style={{
-        fontFamily: `"MS Sans Serif", Tahoma, Verdana, sans-serif`,
-        fontSize: "14px",
-        lineHeight: "1.5",
-        padding: "8px",
-      }}
-    >
-      <p>
-        Buzz is a character I first drew in high school physics. 
-        He's not perfect, a little rough around the edges, but he's learning! 
-        Buzz is often curious about life and depicted going through very human experiences.
-        I like incorpating him in my work for a layer of personalization and it's honestly 
-        it's fun to add more character to what I'm building. 
-      </p>
-      
-      <p>
-        It's often easy to fixate on the finished polished outcome, but for me BuzzOS will never be
-        fully "complete." This allows me to build more freely and use it as an opportunity
-        to build what interests me. I hope to have some fun easter eggs that show the attention to 
-        detail with user experience in mind.
-      </p>
-      
-      <p>
-        This project explores:
-      </p>
-
-      <ul>
-        <li>Window management</li>
-        <li>Drag, resize, and z-index systems</li>
-        <li>Component architecture</li>
-        <li>OS-like interaction patterns</li>
-      </ul>
-
-      <p>
-        Each application runs inside its own window and manages its own state.
-      </p>
-
-      <p>
-        BuzzOS was or is still a very long process. Long.  
-      </p>
-
-      <p>
-        It was first an idea simmering in my mind, later part of a pitch in a recruiting event,
-        drawings in my notebook ignored, and finally a folder git commited.
-      </p>
-
-    <p>During this process:</p>
-        <ul>
-        <li>I applied for 200+ jobs</li>
-        <li>Read 3 books</li>
-        <li>Got ACL surgery</li>
-        <li>Learned to walk again</li>
-      </ul>
+    <div className="journal">
+      <header className="buzz-intro"><img src={buzz} alt="Buzz, the character behind BuzzOS" /><div><span className="journal-eyebrow">THE CHARACTER BEHIND THE DESKTOP</span><h2>Meet Buzz.</h2><p>A little rough around the edges. Still learning.</p></div></header>
+      <section><h3>From a physics notebook</h3><p>Buzz is a character I first drew in high school physics. He’s curious about life and often finds himself going through very human experiences. Bringing him into my work adds a personal touch—and makes building things more fun.</p></section>
+      <section><h3>A project that keeps growing</h3><p>It’s easy to fixate on a polished outcome, but BuzzOS will never be fully “complete.” That gives me room to build freely, follow what interests me, and add small details and easter eggs along the way.</p><p>Each application has its own window and state. Behind the desktop, I’m exploring window management, dragging and resizing, component architecture, and OS-like interactions.</p></section>
+      <section><h3>Life happened along the way</h3><p>BuzzOS started as an idea, became part of a recruiting pitch, lived in notebook drawings, and finally made it into a Git commit. During that time, I:</p><ul><li>Applied for 200+ jobs</li><li>Read 3 books</li><li>Had ACL surgery</li><li>Learned to walk again</li></ul></section>
+      <footer>Still building. Still curious.</footer>
     </div>
   );
 }

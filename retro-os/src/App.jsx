@@ -2,10 +2,21 @@ import React, { useState } from "react";
 import Desktop from "./components/Desktop";
 import DesktopIcon from "./components/DesktopIcon";
 import Window from "./components/Window";
-import folderIcon from "./assets/folder.png";
+import roadmapIcon from "./assets/roadmap.svg";
+import notesIcon from "./assets/notes.svg";
+import snakeIcon from "./assets/snake.svg";
+import pomodoroIcon from "./assets/pomodoro.svg";
+import aboutIcon from "./assets/about.svg";
+import todoIcon from "./assets/todo.svg";
 import Taskbar from "./components/Taskbar";
 import AboutMe from "./components/AboutMe";
 import Todo from "./components/Todo";
+import Notebook from "./components/Notebook";
+import Roadmap from "./components/Roadmap";
+import Updates from "./components/Updates";
+import MusicPlayer from "./components/MusicPlayer";
+import updatesIcon from "./assets/updates.svg";
+import musicIcon from "./assets/music.svg";
 
 
 // APPLICATIONS
@@ -60,12 +71,10 @@ function App() {
     const aspectRatio = options?.aspectRatio ?? null;
     const TITLEBAR_HEIGHT = 32;
 
-    const width = aspectRatio
-      ? baseWidth
-      : 300;
+    const width = baseWidth;
     const height = aspectRatio
       ? Math.round(baseWidth / aspectRatio) + TITLEBAR_HEIGHT
-      : 200;
+      : options.baseHeight ?? 200;
 
     const TASKBAR_HEIGHT = 40;
     const x = Math.round((window.innerWidth - width) / 2);
@@ -198,64 +207,20 @@ function App() {
       {/* ICONS */}
       <div className="desktop-icons">
       <DesktopIcon
-        icon={folderIcon}
-        label="To Do"
-        onDoubleClick={() => openWindow("to do", "Work in progress",
-          <ul>
-            <li>MVP
-              <ul>
-                <li>Fix bugs</li>
-                <li>One game</li>
-              </ul>
-            </li>
-
-            <li>Bugs
-              <ul>
-                <li>Fix time when its :0#</li>
-                <li>Dynamic sizing, fixed ratios, proper initial render</li>
-                <li>pomodoro timer resets when minimzed</li>
-              </ul>
-            </li>
-            
-            <li>Add different APPLICATIONS
-              <ul>
-                <li>tic tac toe</li>
-                <li>snake</li>
-                <li>notes</li>
-                <li>paint</li>
-              </ul>
-            </li>
-
-            <li>Additional
-              <ul>
-                <li>Buzz loading page</li>
-                <li>Menu</li>
-                <li>buzz errors</li>
-                <li>different pomo options</li>
-              </ul>
-            </li>
-        
-            
-            <li>Graphics
-              <ul>
-                <li>buzz</li>
-                <li>give image credits</li>
-
-              </ul>
-            </li>
-
-          </ul>
-          )}
+        icon={roadmapIcon}
+        label="Roadmap"
+        onDoubleClick={() => openWindow("roadmap", "BuzzOS Roadmap", <Roadmap />,
+          { baseWidth: 400, baseHeight: 440 })}
       />
 
       <DesktopIcon
-        icon={folderIcon}
-        label="Notes"
-        onDoubleClick={() => openWindow("notes", "Notes", <p>Notes go here.</p>)}
+        icon={notesIcon}
+        label="Notebook"
+        onDoubleClick={() => openWindow("notes", "Notebook", <Notebook />, { baseWidth: 400, baseHeight: 440 })}
       />
 
       <DesktopIcon
-        icon={folderIcon}
+        icon={snakeIcon}
         label="Snake"
         onDoubleClick={() =>
           openWindow(
@@ -267,20 +232,27 @@ function App() {
         }
       />
       <DesktopIcon
-        icon={folderIcon}
-        label="Square Demo"
+        icon={musicIcon}
+        label="CD Player"
         onDoubleClick={() =>
           openWindow(
-            "square",
-            "Square Window",
-            <div style={{ background: "#333", height: "100%" }} />,
-            { aspectRatio: 1 }
+            "music",
+            "CD Player",
+            <MusicPlayer />,
+            { baseWidth: 340, baseHeight: 470 }
           )
         }
       />
 
       <DesktopIcon
-        icon={folderIcon}
+        icon={updatesIcon}
+        label="Updates"
+        onDoubleClick={() => openWindow("updates", "BuzzOS Updates", <Updates />,
+          { baseWidth: 420, baseHeight: 460 })}
+      />
+
+      <DesktopIcon
+        icon={pomodoroIcon}
         label="Pomodoro"
         onDoubleClick={() =>
           openWindow(
@@ -295,19 +267,19 @@ function App() {
         }
       />
       <DesktopIcon
-        icon={folderIcon}
-        label="About"
+        icon={aboutIcon}
+        label="Meet Buzz"
         onDoubleClick={() =>
           openWindow(
             "about",
-            "About BuzzOS",
+            "Meet Buzz",
             <AboutMe />,
-            { baseWidth: 360 }
+            { baseWidth: 440, baseHeight: 500 }
           )
         }
       />
       <DesktopIcon
-        icon={folderIcon}
+        icon={todoIcon}
         label="Todo"
         onDoubleClick={() =>
           openWindow(

@@ -8,7 +8,7 @@ export default function DesktopIcon({icon, label, onDoubleClick}) {
             className = "desktop-icon"
             onDoubleClick = {onDoubleClick}
         >
-            <img src = {icon} className="desktop-icon-img"/>
+            <img src = {icon} alt="" className="desktop-icon-img" draggable={false}/>
             <p className="desktop-icon-label">{label}</p>
 
         </div>

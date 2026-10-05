@@ -1,0 +1,39 @@
+import "./Updates.css";
+
+// Add new milestones here, newest first.
+const updates = [
+  {
+    date: "2026-10-04",
+    title: "A desktop with more personality",
+    items: [
+      "Added an Updates icon with a dated history of BuzzOS milestones.",
+      "Replaced Square Demo with a CD player: local audio, play/pause, restart, seeking, volume, and a spinning CD during playback.",
+      "Replaced generic folder icons with custom SVG artwork for every app, including a tomato for Pomodoro.",
+      "Turned Notes into Notebook with lined paper and automatic saving in this browser.",
+      "Renamed About to Meet Buzz, with Buzz’s artwork and a clearer layout for the story behind the project.",
+      "Renamed the old To Do page to Roadmap and organized future ideas separately from the Todo list.",
+      "Updated app window sizes to give the new layouts room to breathe.",
+    ],
+  },
+  { date: "2026-07-26", title: "Play & focus", items: ["Added Snake.", "Fixed clock formatting and Pomodoro behavior when minimized or resized.", "Restyled the taskbar, arranged desktop icons, and centered new windows."] },
+  { date: "2026-07-23", title: "Keeping track", items: ["Added the Todo app."] },
+  { date: "2026-01-22", title: "Hello, internet", items: ["Published BuzzOS to GitHub Pages and updated window titles."] },
+  { date: "2026-01-08", title: "Making room", items: ["Added the desktop clock.", "Improved window focus and resizing with fixed aspect ratios."] },
+  { date: "2026-01-05", title: "Windows that work", items: ["Added resizing, maximizing, and taskbar controls.", "Fixed window layering, sizing, and taskbar overlap."] },
+  { date: "2026-01-04", title: "BuzzOS begins", items: ["Created the desktop and initial window system."] },
+];
+
+export default function Updates() {
+  return (
+    <div className="updates-log">
+      <header><span className="updates-eyebrow">THE BUZZOS JOURNAL</span><h2>Small steps, new things.</h2><p>A running log of what’s changed.</p></header>
+      {updates.map(update => (
+        <article key={update.date}>
+          <time dateTime={update.date}>{new Date(`${update.date}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</time>
+          <h3>{update.title}</h3>
+          <ul>{update.items.map(item => <li key={item}>{item}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  );
+}

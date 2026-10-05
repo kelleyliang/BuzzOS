@@ -1,0 +1,10 @@
+.updates-log { background: #fffdf2; color: #303442; padding: 20px; font: 13px/1.6 Tahoma, sans-serif; user-select: text; }
+.updates-log header { border-bottom: 2px solid #303442; padding-bottom: 16px; }
+.updates-eyebrow { font: 10px monospace; letter-spacing: 2px; }
+.updates-log h2 { font-size: 21px; margin: 8px 0; }
+.updates-log header p { margin: 0; color: #626575; }
+.updates-log article { padding: 18px 0; border-bottom: 1px solid #deded3; }
+.updates-log article:last-child { border: 0; padding-bottom: 0; }
+.updates-log time { font: 11px monospace; color: #676b7c; }
+.updates-log h3 { font-size: 14px; margin: 6px 0; }
+.updates-log ul { padding-left: 17px; margin: 0; }

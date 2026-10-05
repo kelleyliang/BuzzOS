@@ -1,0 +1,20 @@
+.cd-player { max-width: 420px; margin: auto; padding: 8px; color: #292b39; font: 12px/1.5 Tahoma, sans-serif; }
+.cd-deck { display: grid; place-items: center; padding: 14px; background: #b6b7bd; border: 2px inset #eee; }
+.cd-disc { position: relative; width: 170px; height: 170px; border-radius: 50%; border: 1px solid #777c89; background: repeating-radial-gradient(circle, transparent 0 3px, #ffffff25 4px 5px), conic-gradient(#b6bed5, #faf3fe, #b6e1db, #e9e0bc, #acb5d5, #f3dbef, #c1e2ef, #b6bed5); box-shadow: 3px 5px 8px #34344455; animation: cd-spin 5s linear infinite; animation-play-state: paused; }
+.cd-disc.is-playing { animation-play-state: running; }
+.cd-label { position: absolute; top: 26px; left: 0; right: 0; text-align: center; font: bold 10px/1.4 monospace; letter-spacing: 2px; color: #4a4866; }
+.cd-hole { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 22px; height: 22px; border-radius: 50%; background: #b6b7bd; border: 9px solid #e5e5eb; box-shadow: 0 0 0 1px #8d8d9d; }
+.cd-display { margin-top: 12px; padding: 9px 12px; background: #e1e8d5; border: 2px inset #eee; font-family: monospace; }
+.cd-display small { font-size: 9px; letter-spacing: 2px; color: #59644a; }
+.cd-display div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cd-progress, .cd-controls, .cd-volume { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.cd-player input[type="range"] { min-width: 0; flex: 1; accent-color: #4a4a7a; }
+.cd-controls button, .cd-load { border: 2px outset #eee; border-radius: 0; padding: 6px 10px; background: #d5d5da; color: #292b39; font: 12px Tahoma, sans-serif; cursor: pointer; }
+.cd-controls button:active, .cd-load:active { border-style: inset; }
+.cd-controls button:disabled { opacity: .45; cursor: default; }
+.cd-play { flex: 1; }
+.cd-load input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.cd-load:focus-within { outline: 2px solid navy; outline-offset: 2px; }
+.cd-hint { font-size: 10px; color: #606274; margin-bottom: 0; }
+@keyframes cd-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cd-disc { animation: none; } }
