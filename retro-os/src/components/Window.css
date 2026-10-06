@@ -212,6 +212,15 @@
   height: calc(100% - 32px);
 }
 
+/* Games fit their board into the remaining space beneath the title bar. */
+.window-content-game {
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  height: auto;
+  overflow: hidden;
+}
+
 /* =========================
    RESIZE HANDLES
 ========================= */
@@ -245,4 +254,3 @@
   height: 12px;
   cursor: nwse-resize;
 }
-

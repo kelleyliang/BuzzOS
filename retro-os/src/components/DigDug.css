@@ -1,12 +1,17 @@
 .digdug {
   background: #172330;
   color: #f4edd5;
-  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
   padding: 12px;
   box-sizing: border-box;
   font: 12px/1.5 Tahoma, Arial, sans-serif;
 }
 .digdug-heading {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,6 +36,7 @@
 .digdug button:disabled { opacity: 0.45; cursor: default; }
 .digdug button:focus-visible, .digdug canvas:focus-visible { outline: 2px solid #ffd35b; outline-offset: 2px; }
 .digdug-hud {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -43,8 +49,21 @@
   color: #9eb6bd;
 }
 .digdug-hud strong { display: block; color: #ffd35b; font-size: 18px; }
-.digdug-stage { position: relative; width: min(100%, 720px); margin: auto; }
-.digdug canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; background: #172330; }
+.digdug-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: min(100%, 720px);
+  margin: 0 auto;
+}
+.digdug canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  background: #172330;
+}
 .digdug-overlay {
   position: absolute;
   inset: 0;
@@ -55,6 +74,9 @@
   background: #0c1720b8;
 }
 .digdug-overlay-card {
+  box-sizing: border-box;
+  max-height: 100%;
+  overflow: auto;
   max-width: 290px;
   text-align: center;
   background: #172330;
@@ -65,8 +87,10 @@
 .digdug-overlay-card h3 { font: bold 25px/1.2 monospace; margin: 8px 0 12px; color: #fff7d6; }
 .digdug-overlay-card p { color: #c6d5d5; }
 .digdug-overlay-card button { background: #ffd35b; color: #172330; border-color: #fff0ae #8f6e24 #8f6e24 #fff0ae; margin-top: 8px; }
-.digdug-feedback { min-height: 18px; margin-top: 9px; color: #ffd35b; font-family: monospace; }
-.digdug-instructions { border-top: 1px solid #3a5360; margin-top: 8px; padding-top: 6px; color: #c6d5d5; }
+.digdug-feedback { flex-shrink: 0; min-height: 18px; margin-top: 9px; color: #ffd35b; font-family: monospace; }
+.digdug-instructions { flex-shrink: 0; border-top: 1px solid #3a5360; margin-top: 8px; padding-top: 6px; color: #c6d5d5; }
+.digdug-instructions details { max-height: 100px; overflow: auto; }
+.digdug-instructions summary { cursor: pointer; color: #ffd35b; }
 .digdug-instructions p { margin: 6px 0; }
 .digdug-instructions kbd { background: #294152; border-bottom: 2px solid #567180; padding: 2px 4px; color: #fff7d6; }
 .digdug-instructions > span { font-size: 10px; color: #9eb6bd; }

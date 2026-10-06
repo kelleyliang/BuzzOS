@@ -99,7 +99,8 @@ function App() {
           maximized: false,
           prevMaximizePosition: null,
           prevMinimizePosition: null,
-          aspectRatio: options.aspectRatio ?? null
+          aspectRatio: options.aspectRatio ?? null,
+          contentClassName: options.contentClassName ?? ""
         }
       ];
     });
@@ -245,7 +246,11 @@ function App() {
         icon={digdugIcon}
         label="Dig Dug"
         onDoubleClick={() => openWindow("digdug", "Dig Dug · Tunnel Trouble", <DigDug />,
-          { baseWidth: Math.min(760, window.innerWidth - 24), baseHeight: Math.min(900, window.innerHeight - 64) })}
+          {
+            baseWidth: Math.min(760, window.innerWidth - 24),
+            baseHeight: Math.min(900, window.innerHeight - 64),
+            contentClassName: "window-content-game"
+          })}
       />
       <DesktopIcon
         icon={musicIcon}
@@ -337,6 +342,7 @@ function App() {
           onMaximize={() => toggleMaximize(window.id)}
           onMove={(pos) => updateWindowPosition(window.id, pos)}
           aspectRatio={window.aspectRatio}
+          contentClassName={window.contentClassName}
           onResize={(newSize) => updateWindowSize(window.id, newSize)}
         >
           {React.isValidElement(window.content)

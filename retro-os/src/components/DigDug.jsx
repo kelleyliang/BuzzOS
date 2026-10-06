@@ -178,8 +178,11 @@ export default function DigDug({ isActive = true, minimized = false }) {
       </div>
       <footer className="digdug-instructions" id="digdug-instructions">
         <p><kbd>↑ ↓ ← →</kbd> / <kbd>WASD</kbd> Dig & aim · Hold <kbd>Space</kbd> Pump · <kbd>P</kbd> Pause</p>
-        <p>Hold Space to pump up to 3 tunnel squares ahead. Bugs deflate if you stop early. Faded ghosts pass through dirt without digging; pump them once they become solid again. Shaking rocks give you a warning before falling.</p>
-        <span>Original characters · A Dig Dug-style game</span>
+        <details>
+          <summary>How to play</summary>
+          <p>Hold Space to pump up to 3 tunnel squares ahead. Bugs deflate if you stop early. Faded ghosts pass through dirt without digging; pump them once they become solid again. Shaking rocks give you a warning before falling.</p>
+          <span>Original characters · A Dig Dug-style game</span>
+        </details>
       </footer>
     </div>
   );

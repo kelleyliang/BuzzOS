@@ -9,6 +9,7 @@ export default function Window({
     position, 
     size,
     aspectRatio,
+    contentClassName = "",
 
     onMove,
     zIndex, 
@@ -249,7 +250,7 @@ export default function Window({
                 </div>
             </div>
 
-            <div className="window-content">
+            <div className={`window-content ${contentClassName}`}>
                 {children}
             </div>
 
