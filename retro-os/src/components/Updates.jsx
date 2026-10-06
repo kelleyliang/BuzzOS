@@ -3,6 +3,16 @@ import "./Updates.css";
 // Add new milestones here, newest first.
 const updates = [
   {
+    date: "2026-10-05",
+    title: "A new minefield to explore",
+    items: [
+      "Added Minesweeper with a custom desktop icon and classic retro styling.",
+      "Choose Beginner, Intermediate, or Expert difficulty, with a safe first move and an elapsed-time counter.",
+      "Flag squares with a right-click, the F key, or the flag-mode toggle for touch controls.",
+      "Clear neighboring squares by clicking an open number when its flag count matches, and start a fresh board with the smiley button.",
+    ],
+  },
+  {
     date: "2026-10-04",
     title: "A desktop with more personality",
     items: [
