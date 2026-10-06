@@ -3,6 +3,17 @@ import "./Updates.css";
 // Add new milestones here, newest first.
 const updates = [
   {
+    date: "2026-10-06",
+    title: "Dig, pump, and dodge",
+    items: [
+      "Added Dig Dug · Tunnel Trouble, a Dig Dug-style game with original pixel characters and a custom desktop icon.",
+      "Dig with arrow keys or WASD, hold Space to inflate enemies, and drop rocks for bonus points. Includes three lives, scoring, and successive levels.",
+      "Enemies start in isolated tunnel pockets and can fade through dirt without digging. Staggered ghost timing keeps them from all phasing at once.",
+      "Gave the game a larger window, slower movement, and a longer warning before rocks fall.",
+      "Added pause and restart controls, with automatic pausing when switching windows, minimizing, or leaving the browser.",
+    ],
+  },
+  {
     date: "2026-10-05",
     title: "A new minefield to explore",
     items: [

@@ -6,6 +6,7 @@ import roadmapIcon from "./assets/roadmap.svg";
 import notesIcon from "./assets/notes.svg";
 import snakeIcon from "./assets/snake.svg";
 import minesweeperIcon from "./assets/minesweeper.svg";
+import digdugIcon from "./assets/digdug.svg";
 import pomodoroIcon from "./assets/pomodoro.svg";
 import aboutIcon from "./assets/about.svg";
 import todoIcon from "./assets/todo.svg";
@@ -24,6 +25,7 @@ import musicIcon from "./assets/music.svg";
 import Pomodoro from "./components/Pomodoro";
 import Snake from "./components/Snake";
 import Minesweeper from "./components/Minesweeper";
+import DigDug from "./components/DigDug";
 
 
 function App() {
@@ -240,6 +242,12 @@ function App() {
           { baseWidth: Math.min(380, window.innerWidth - 24), baseHeight: Math.min(490, window.innerHeight - 64) })}
       />
       <DesktopIcon
+        icon={digdugIcon}
+        label="Dig Dug"
+        onDoubleClick={() => openWindow("digdug", "Dig Dug · Tunnel Trouble", <DigDug />,
+          { baseWidth: Math.min(760, window.innerWidth - 24), baseHeight: Math.min(900, window.innerHeight - 64) })}
+      />
+      <DesktopIcon
         icon={musicIcon}
         label="CD Player"
         onDoubleClick={() =>
@@ -332,7 +340,11 @@ function App() {
           onResize={(newSize) => updateWindowSize(window.id, newSize)}
         >
           {React.isValidElement(window.content)
-            ? React.cloneElement(window.content, { windowMetrics })
+            ? React.cloneElement(window.content, {
+                windowMetrics,
+                isActive: activeWindowId === window.id,
+                minimized: window.minimized,
+              })
             : window.content}
         </Window>
       );

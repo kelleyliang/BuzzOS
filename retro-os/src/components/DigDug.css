@@ -1,0 +1,72 @@
+.digdug {
+  background: #172330;
+  color: #f4edd5;
+  min-height: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  font: 12px/1.5 Tahoma, Arial, sans-serif;
+}
+.digdug-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+}
+.digdug-eyebrow { color: #ffd35b; font: bold 10px/1.5 monospace; letter-spacing: 2px; }
+.digdug h2 { font: bold 19px/1.4 monospace; margin: 2px 0 0; }
+.digdug h2 span { color: #a4b8be; font-size: 12px; }
+.digdug-actions { display: flex; gap: 6px; }
+.digdug button {
+  background: #294152;
+  color: #f4edd5;
+  border: 2px solid;
+  border-color: #567180 #0c1720 #0c1720 #567180;
+  border-radius: 0;
+  padding: 5px 9px;
+  font: bold 12px/1.5 monospace;
+}
+.digdug button:hover:not(:disabled) { background: #385467; border-color: #ffd35b; }
+.digdug button:disabled { opacity: 0.45; cursor: default; }
+.digdug button:focus-visible, .digdug canvas:focus-visible { outline: 2px solid #ffd35b; outline-offset: 2px; }
+.digdug-hud {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #0e1822;
+  border: 1px solid #3a5360;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  font: 10px/1.5 monospace;
+  color: #9eb6bd;
+}
+.digdug-hud strong { display: block; color: #ffd35b; font-size: 18px; }
+.digdug-stage { position: relative; width: min(100%, 720px); margin: auto; }
+.digdug canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; background: #172330; }
+.digdug-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background: #0c1720b8;
+}
+.digdug-overlay-card {
+  max-width: 290px;
+  text-align: center;
+  background: #172330;
+  border: 2px solid #ffd35b;
+  box-shadow: 5px 5px 0 #080f17;
+  padding: 22px 18px;
+}
+.digdug-overlay-card h3 { font: bold 25px/1.2 monospace; margin: 8px 0 12px; color: #fff7d6; }
+.digdug-overlay-card p { color: #c6d5d5; }
+.digdug-overlay-card button { background: #ffd35b; color: #172330; border-color: #fff0ae #8f6e24 #8f6e24 #fff0ae; margin-top: 8px; }
+.digdug-feedback { min-height: 18px; margin-top: 9px; color: #ffd35b; font-family: monospace; }
+.digdug-instructions { border-top: 1px solid #3a5360; margin-top: 8px; padding-top: 6px; color: #c6d5d5; }
+.digdug-instructions p { margin: 6px 0; }
+.digdug-instructions kbd { background: #294152; border-bottom: 2px solid #567180; padding: 2px 4px; color: #fff7d6; }
+.digdug-instructions > span { font-size: 10px; color: #9eb6bd; }
