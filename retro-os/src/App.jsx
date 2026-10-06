@@ -5,6 +5,7 @@ import Window from "./components/Window";
 import roadmapIcon from "./assets/roadmap.svg";
 import notesIcon from "./assets/notes.svg";
 import snakeIcon from "./assets/snake.svg";
+import minesweeperIcon from "./assets/minesweeper.svg";
 import pomodoroIcon from "./assets/pomodoro.svg";
 import aboutIcon from "./assets/about.svg";
 import todoIcon from "./assets/todo.svg";
@@ -22,6 +23,7 @@ import musicIcon from "./assets/music.svg";
 // APPLICATIONS
 import Pomodoro from "./components/Pomodoro";
 import Snake from "./components/Snake";
+import Minesweeper from "./components/Minesweeper";
 
 
 function App() {
@@ -230,6 +232,12 @@ function App() {
             { aspectRatio: 4 / 3, baseWidth: 500 }
           )
         }
+      />
+      <DesktopIcon
+        icon={minesweeperIcon}
+        label="Minesweeper"
+        onDoubleClick={() => openWindow("minesweeper", "Minesweeper", <Minesweeper />,
+          { baseWidth: Math.min(380, window.innerWidth - 24), baseHeight: Math.min(490, window.innerHeight - 64) })}
       />
       <DesktopIcon
         icon={musicIcon}

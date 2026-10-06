@@ -1,0 +1,88 @@
+.minesweeper {
+  color: #111;
+  background: #c0c0c0;
+  padding: 10px;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+.minesweeper-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.minesweeper button, .minesweeper select {
+  border-radius: 0;
+  color: #111;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #fff #777 #777 #fff;
+  font: inherit;
+  padding: 4px 6px;
+  transition: none;
+}
+.minesweeper button:active, .minesweeper button[aria-pressed="true"] {
+  border-color: #777 #fff #fff #777;
+}
+.minesweeper button:focus-visible, .minesweeper select:focus-visible {
+  outline: 2px solid navy;
+  outline-offset: -3px;
+}
+.minesweeper-dashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border: 3px solid;
+  border-color: #777 #fff #fff #777;
+}
+.minesweeper-counter {
+  background: #180000;
+  color: #ff3535;
+  font: bold 28px/1 monospace;
+  padding: 4px;
+  min-width: 3ch;
+  text-align: right;
+}
+.minesweeper .minesweeper-reset {
+  font-size: 26px;
+  width: 42px;
+  height: 40px;
+  padding: 0;
+  line-height: 1;
+}
+.minesweeper-status { margin: 10px 0; }
+.minesweeper-board-scroll { overflow: auto; padding: 2px; }
+.minesweeper-board {
+  display: grid;
+  width: max-content;
+  margin: 0 auto;
+  border: 3px solid;
+  border-color: #777 #fff #fff #777;
+}
+.minesweeper .minesweeper-cell {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font: bold 18px/1 monospace;
+}
+.minesweeper .minesweeper-cell.revealed {
+  border: 1px solid #999;
+  background: #ccc;
+}
+.minesweeper .minesweeper-cell.flagged { color: #c00000; }
+.minesweeper .minesweeper-cell.exploded { background: #f33; color: #111; }
+.minesweeper-cell:disabled { cursor: default; opacity: 1; }
+.minesweeper-cell.revealed[data-count="1"] { color: #0000c0; }
+.minesweeper-cell.revealed[data-count="2"] { color: #007000; }
+.minesweeper-cell.revealed[data-count="3"] { color: #c00000; }
+.minesweeper-cell.revealed[data-count="4"] { color: #000070; }
+.minesweeper-cell.revealed[data-count="5"] { color: #700000; }
+.minesweeper-cell.revealed[data-count="6"] { color: #007070; }
+.minesweeper-cell.revealed[data-count="7"] { color: #111; }
+.minesweeper-cell.revealed[data-count="8"] { color: #666; }
+.minesweeper-help { color: #333; line-height: 1.6; margin: 10px 0 0; }
