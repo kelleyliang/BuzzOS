@@ -1,6 +1,6 @@
 import "./Taskbar.css";
 import Clock from "./Clock";
-import buzz from "../assets/buzz.png"; 
+import buzz from "../assets/buzz-character.png";
 
 export default function Taskbar({windows, activeWindowId, onClickWindow}) {
     return (

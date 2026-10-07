@@ -24,8 +24,8 @@
 
 .taskbar-buzz {
   height: 28px;
-  width: 28px;
-  image-rendering: pixelated;
+  width: 44px;
+  image-rendering: auto;
   object-fit: contain;
   flex-shrink: 0;
 }

@@ -1,4 +1,4 @@
-import buzz from "../assets/buzz.png";
+import buzz from "../assets/buzz-character.png";
 import "./Journal.css";
 
 export default function AboutMe() {

@@ -8,7 +8,7 @@ import snakeIcon from "./assets/snake.svg";
 import minesweeperIcon from "./assets/minesweeper.svg";
 import digdugIcon from "./assets/digdug.svg";
 import pomodoroIcon from "./assets/pomodoro.svg";
-import aboutIcon from "./assets/about.svg";
+import aboutIcon from "./assets/buzz-character.png";
 import todoIcon from "./assets/todo.svg";
 import Taskbar from "./components/Taskbar";
 import AboutMe from "./components/AboutMe";
