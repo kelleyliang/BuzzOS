@@ -1,0 +1,62 @@
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 24px;
+  overflow: auto;
+  background: #c0c0c0 url('../assets/wallpaper-hd.png') center / cover;
+  color: #111;
+  font: 13px/1.5 Tahoma, Arial, sans-serif;
+}
+.boot-card {
+  box-sizing: border-box;
+  width: min(100%, 360px);
+  padding: 22px;
+  text-align: center;
+  margin: auto;
+  background: #c0c0c0;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0 #000;
+}
+.boot-titlebar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -22px -22px 18px;
+  padding: 5px 8px;
+  background: navy;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+.boot-eyebrow { color: #4a4a7a; font: 10px/1.5 monospace; letter-spacing: 2px; }
+.boot-buzz { display: block; width: 130px; max-width: 70%; height: auto; margin: 18px auto 10px; }
+.boot-screen h1 { margin: 0; color: navy; font: bold 38px/1.2 Tahoma, sans-serif; letter-spacing: -2px; }
+.boot-screen h1 span { color: #4a4a7a; }
+.boot-tagline { margin: 8px 0 22px; color: #404040; }
+.boot-progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font: 12px/1.5 monospace; }
+.boot-progress {
+  height: 24px;
+  padding: 3px;
+  background: #e0e0e0;
+  border: 2px solid;
+  border-color: #808080 #ffffff #ffffff #808080;
+}
+.boot-progress-fill {
+  height: 100%;
+  background: navy;
+  transition: width 70ms linear;
+}
+.boot-status { min-height: 20px; margin: 12px 0 20px; color: navy; font-family: monospace; }
+.boot-footer { color: #404040; font-size: 11px; }
+@media (prefers-reduced-motion: reduce) {
+  .boot-progress-fill { transition: none; }
+}
+@media (max-height: 480px) {
+  .boot-buzz { width: 110px; margin-top: 12px; }
+  .boot-screen h1 { font-size: 38px; }
+  .boot-tagline, .boot-status { margin-bottom: 16px; }
+}
