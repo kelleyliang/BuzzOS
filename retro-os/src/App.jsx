@@ -260,7 +260,7 @@ function App() {
             "music",
             "CD Player",
             <MusicPlayer />,
-            { baseWidth: 340, baseHeight: 470 }
+            { baseWidth: 340, baseHeight: 510 }
           )
         }
       />

@@ -12,6 +12,9 @@
 .cd-controls button, .cd-load { border: 2px outset #eee; border-radius: 0; padding: 6px 10px; background: #d5d5da; color: #292b39; font: 12px Tahoma, sans-serif; cursor: pointer; }
 .cd-controls button:active, .cd-load:active { border-style: inset; }
 .cd-controls button:disabled { opacity: .45; cursor: default; }
+.cd-options { display: flex; gap: 8px; margin-top: 10px; }
+.cd-options button { border: 2px outset #eee; border-radius: 0; padding: 4px 9px; background: #d5d5da; color: #292b39; font: 11px Tahoma, sans-serif; }
+.cd-options button[aria-pressed="true"] { border-style: inset; background: #e1e8d5; }
 .cd-play { flex: 1; }
 .cd-load input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .cd-load:focus-within { outline: 2px solid navy; outline-offset: 2px; }

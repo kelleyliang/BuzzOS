@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import houseMix from "../assets/audio/buzz-after-hours.mp3";
 import "./MusicPlayer.css";
 
 function timestamp(seconds) {
@@ -6,29 +7,36 @@ function timestamp(seconds) {
   return `${Math.floor(value / 60)}:${String(value % 60).padStart(2, "0")}`;
 }
 
+const HOUSE_TRACK = { name: "Buzz After Hours · Mellow Jazz House", url: houseMix, builtIn: true };
+
 export default function MusicPlayer() {
   const audioRef = useRef(null);
-  const [track, setTrack] = useState(null);
+  const [track, setTrack] = useState(HOUSE_TRACK);
+  const [looping, setLooping] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(0.7);
+  const [volume, setVolume] = useState(0.45);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!track) return;
+    if (track.builtIn) return;
     return () => URL.revokeObjectURL(track.url);
   }, [track]);
 
-  function loadTrack(event) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  function switchTrack(nextTrack) {
     audioRef.current.pause();
     setPlaying(false);
     setPosition(0);
     setDuration(0);
     setError("");
-    setTrack({ name: file.name.replace(/\.[^.]+$/, ""), url: URL.createObjectURL(file) });
+    setTrack(nextTrack);
+  }
+
+  function loadTrack(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    switchTrack({ name: file.name.replace(/\.[^.]+$/, ""), url: URL.createObjectURL(file) });
     event.target.value = "";
   }
 
@@ -39,14 +47,14 @@ export default function MusicPlayer() {
         await audioRef.current.play();
         setError("");
       } catch {
-        setError("This file couldn’t play. Try another audio file.");
+        setError("Playback couldn’t start. Press Play to try again, or load another audio file.");
       }
     }
   }
 
   return (
     <div className="cd-player">
-      <audio ref={audioRef} src={track?.url} preload="metadata"
+      <audio ref={audioRef} src={track.url} preload="metadata" loop={looping}
         onLoadedMetadata={() => {
           setDuration(Number.isFinite(audioRef.current.duration) ? audioRef.current.duration : 0);
           audioRef.current.volume = volume;
@@ -66,8 +74,16 @@ export default function MusicPlayer() {
         <button className="cd-play" disabled={!track} onClick={togglePlayback}>{playing ? "Pause" : "Play"}</button>
         <label className="cd-load">Load music<input type="file" accept="audio/*" onChange={loadTrack} /></label>
       </div>
+      <div className="cd-options">
+        <button type="button" aria-pressed={looping} onClick={() => setLooping(value => !value)}>
+          Loop {looping ? "on" : "off"}
+        </button>
+        {!track.builtIn && <button type="button" onClick={() => switchTrack(HOUSE_TRACK)}>House mix</button>}
+      </div>
       <label className="cd-volume">Volume<input aria-label="Volume" type="range" min="0" max="1" step="0.01" value={volume} onChange={event => { const value = Number(event.target.value); setVolume(value); audioRef.current.volume = value; }} /></label>
-      <p className="cd-hint">{error || "Pick an audio file from your computer. It stays on your device."}</p>
+      <p className="cd-hint">{error || (track.builtIn
+        ? "A mellow 108 BPM loop with light piano phrases, quiet backing chords, and a gentle house groove."
+        : "Your audio file stays on your device. Switch back to House mix anytime.")}</p>
     </div>
   );
 }
