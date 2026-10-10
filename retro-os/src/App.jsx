@@ -240,7 +240,11 @@ function App() {
         icon={minesweeperIcon}
         label="Minesweeper"
         onDoubleClick={() => openWindow("minesweeper", "Minesweeper", <Minesweeper />,
-          { baseWidth: Math.min(380, window.innerWidth - 24), baseHeight: Math.min(490, window.innerHeight - 64) })}
+          {
+            baseWidth: Math.min(400, window.innerWidth - 24),
+            baseHeight: Math.min(560, window.innerHeight - 64),
+            contentClassName: "window-content-game"
+          })}
       />
       <DesktopIcon
         icon={digdugIcon}

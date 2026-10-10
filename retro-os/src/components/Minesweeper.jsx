@@ -1,12 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { LEVELS, newGame, reveal, toggleFlag } from '../games/minesweeper';
 import './Minesweeper.css';
 
 export default function Minesweeper() {
+  const boardContainerRef = useRef(null);
   const [level, setLevel] = useState('beginner');
   const [game, setGame] = useState(() => newGame('beginner'));
   const [seconds, setSeconds] = useState(0);
   const [flagMode, setFlagMode] = useState(false);
+
+  useLayoutEffect(() => {
+    const container = boardContainerRef.current;
+    function fitBoard() {
+      // Allow for the board border and container padding; keep cells readable.
+      const width = container.clientWidth - 10;
+      const height = container.clientHeight - 10;
+      const cellSize = Math.max(16, Math.min(28, Math.floor(width / game.cols), Math.floor(height / game.rows)));
+      container.style.setProperty('--mine-cell-size', `${cellSize}px`);
+    }
+    fitBoard();
+    const observer = new ResizeObserver(fitBoard);
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [game.cols, game.rows]);
 
   useEffect(() => {
     if (game.status !== 'playing') return;
@@ -56,8 +72,8 @@ export default function Minesweeper() {
         </output>
       </div>
       <p className="minesweeper-status" role="status">{message}</p>
-      <div className="minesweeper-board-scroll">
-        <div className="minesweeper-board" style={{ gridTemplateColumns: `repeat(${game.cols}, 28px)` }} role="group" aria-label="Minefield">
+      <div className="minesweeper-board-scroll" ref={boardContainerRef}>
+        <div className="minesweeper-board" style={{ gridTemplateColumns: `repeat(${game.cols}, var(--mine-cell-size))` }} role="group" aria-label="Minefield">
           {game.cells.map((cell, index) => {
             const showMine = cell.mine && (cell.revealed || finished);
             const wrongFlag = game.status === 'lost' && cell.flagged && !cell.mine;
