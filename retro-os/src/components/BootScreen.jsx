@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import startupSound from '../assets/audio/buzz-startup.mp3';
 import buzz from '../assets/buzz-character.png';
 import wallpaper from '../assets/wallpaper-hd.png';
 import roadmap from '../assets/roadmap.svg';
@@ -17,6 +18,32 @@ const ASSETS = [buzz, wallpaper, roadmap, notes, snake, minesweeper, digdug, mus
 export default function BootScreen({ children }) {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (ready) return;
+    const audio = new Audio(startupSound);
+    audio.volume = 0.4;
+    let active = true;
+    function removeListeners() {
+      document.removeEventListener('pointerdown', startSound);
+      document.removeEventListener('keydown', startSound);
+    }
+    function startSound() {
+      removeListeners();
+      if (active) audio.play().catch(() => {});
+    }
+    audio.play().catch(error => {
+      if (active && error.name === 'NotAllowedError') {
+        document.addEventListener('pointerdown', startSound);
+        document.addEventListener('keydown', startSound);
+      }
+    });
+    return () => {
+      active = false;
+      removeListeners();
+      audio.pause();
+    };
+  }, [ready]);
 
   useEffect(() => {
     let loaded = 0;
