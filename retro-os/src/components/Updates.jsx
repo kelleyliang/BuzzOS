@@ -3,6 +3,17 @@ import "./Updates.css";
 // Add new milestones here, newest first.
 const updates = [
   {
+    date: "2026-10-14",
+    title: "A little place to call home",
+    items: [
+      "Buzz on the taskbar now opens a menu with a searchable list of all ten applications. His icon stays flat beside the taskbar separator.",
+      "Added a local profile with a display name you can personalize, plus shortcuts to Meet Buzz and Show desktop.",
+      "Added settings for green hills, classic teal, or midnight backgrounds, desktop icon visibility, a 24-hour clock, and startup sound.",
+      "Profile and settings changes save automatically in this browser.",
+      "Launching an already-open app restores its window. The menu supports keyboard navigation, Escape to close, and clicking outside to dismiss.",
+    ],
+  },
+  {
     date: "2026-10-06",
     title: "Dig, pump, and dodge",
     items: [
