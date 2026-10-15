@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { readPreferences, savePreferences } from "./settings/preferences";
 import Desktop from "./components/Desktop";
 import DesktopIcon from "./components/DesktopIcon";
 import Window from "./components/Window";
@@ -27,16 +28,29 @@ import Snake from "./components/Snake";
 import Minesweeper from "./components/Minesweeper";
 import DigDug from "./components/DigDug";
 
+const APPLICATIONS = [
+  { id: 'roadmap', label: 'Roadmap', title: 'BuzzOS Roadmap', description: 'See what’s coming next', icon: roadmapIcon, Component: Roadmap, options: { baseWidth: 400, baseHeight: 440 } },
+  { id: 'notes', label: 'Notebook', title: 'Notebook', description: 'A place for your thoughts', icon: notesIcon, Component: Notebook, options: { baseWidth: 400, baseHeight: 440 } },
+  { id: 'snake', label: 'Snake', title: 'Snake', description: 'One more snack, one more turn', icon: snakeIcon, Component: Snake, options: { aspectRatio: 4 / 3, baseWidth: 500 } },
+  { id: 'minesweeper', label: 'Minesweeper', title: 'Minesweeper', description: 'Clear a little minefield', icon: minesweeperIcon, Component: Minesweeper, options: { baseWidth: 400, baseHeight: 560, contentClassName: 'window-content-game' } },
+  { id: 'digdug', label: 'Dig Dug', title: 'Dig Dug · Tunnel Trouble', description: 'Dig, pump, and dodge', icon: digdugIcon, Component: DigDug, options: { baseWidth: 760, baseHeight: 900, contentClassName: 'window-content-game' } },
+  { id: 'music', label: 'CD Player', title: 'CD Player', description: 'Mellow jazz for your desktop', icon: musicIcon, Component: MusicPlayer, options: { baseWidth: 340, baseHeight: 510 } },
+  { id: 'updates', label: 'Updates', title: 'BuzzOS Updates', description: 'The latest from BuzzOS', icon: updatesIcon, Component: Updates, options: { baseWidth: 420, baseHeight: 460 } },
+  { id: 'pomodoro', label: 'Pomodoro', title: 'Pomodoro Timer', description: 'A little time to focus', icon: pomodoroIcon, Component: Pomodoro, options: { aspectRatio: 320 / 220, baseWidth: 320 } },
+  { id: 'about', label: 'Meet Buzz', title: 'Meet Buzz', description: 'The story behind the desktop', icon: aboutIcon, Component: AboutMe, options: { baseWidth: 440, baseHeight: 500 } },
+  { id: 'todo', label: 'Todo', title: 'Todo List', description: 'Small steps, checked off', icon: todoIcon, Component: Todo, options: { baseWidth: 360 } },
+];
 
 function App() {
   // defined hooks
   const [windows, setWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
+  const [startOpen, setStartOpen] = useState(false);
+  const [preferences, setPreferences] = useState(readPreferences);
+
+  useEffect(() => { savePreferences(preferences); }, [preferences]);
 
   // constants
-  const POMODORO_BASE_WIDTH = 320;
-  const POMODORO_BASE_HEIGHT = 220;
-
   const BASE_WIDTH = 300;
   const BASE_HEIGHT = 220;
   const MAX_SCALE = 2;
@@ -68,17 +82,19 @@ function App() {
   function openWindow(id, title, content, options = {}) {
     // If already open, do nothing (later we bring to front)
     if (windows.some(w => w.id === id)) {
-      activateWindow(id);
+      restoreWindow(id);
       return;
     }
     const baseWidth = options.baseWidth ?? 300;
     const aspectRatio = options?.aspectRatio ?? null;
     const TITLEBAR_HEIGHT = 32;
 
-    const width = baseWidth;
+    let width = Math.min(baseWidth, window.innerWidth - 24);
+    const availableHeight = window.innerHeight - 64;
+    if (aspectRatio) width = Math.min(width, (availableHeight - TITLEBAR_HEIGHT) * aspectRatio);
     const height = aspectRatio
-      ? Math.round(baseWidth / aspectRatio) + TITLEBAR_HEIGHT
-      : options.baseHeight ?? 200;
+      ? Math.round(width / aspectRatio) + TITLEBAR_HEIGHT
+      : Math.min(options.baseHeight ?? 200, availableHeight);
 
     const TASKBAR_HEIGHT = 40;
     const x = Math.round((window.innerWidth - width) / 2);
@@ -199,123 +215,43 @@ function App() {
  
 
 
+  function launchApp(id) {
+    const app = APPLICATIONS.find(item => item.id === id);
+    if (!app) return;
+    setStartOpen(false);
+    const Component = app.Component;
+    openWindow(app.id, app.title, <Component />, app.options);
+  }
+
+  function showDesktop() {
+    setWindows(current => current.map(item => ({ ...item, minimized: true, prevMinimizePosition: item.position })));
+    setActiveWindowId(null);
+    setStartOpen(false);
+  }
+
   // what we return, actual rendering occurs
   return (
-    <Desktop>
+    <Desktop wallpaper={preferences.wallpaper}>
       {/* TASKBAR */}
       <Taskbar  
         windows={windows}
         activeWindowId={activeWindowId}
         onClickWindow={handleTaskBarClick}
+        apps={APPLICATIONS}
+        startOpen={startOpen}
+        onStartChange={setStartOpen}
+        onLaunch={launchApp}
+        onShowDesktop={showDesktop}
+        preferences={preferences}
+        onPreferencesChange={setPreferences}
       />
 
-      {/* ICONS */}
-      <div className="desktop-icons">
-      <DesktopIcon
-        icon={roadmapIcon}
-        label="Roadmap"
-        onDoubleClick={() => openWindow("roadmap", "BuzzOS Roadmap", <Roadmap />,
-          { baseWidth: 400, baseHeight: 440 })}
-      />
-
-      <DesktopIcon
-        icon={notesIcon}
-        label="Notebook"
-        onDoubleClick={() => openWindow("notes", "Notebook", <Notebook />, { baseWidth: 400, baseHeight: 440 })}
-      />
-
-      <DesktopIcon
-        icon={snakeIcon}
-        label="Snake"
-        onDoubleClick={() =>
-          openWindow(
-            "snake",
-            "Snake",
-            <Snake />,
-            { aspectRatio: 4 / 3, baseWidth: 500 }
-          )
-        }
-      />
-      <DesktopIcon
-        icon={minesweeperIcon}
-        label="Minesweeper"
-        onDoubleClick={() => openWindow("minesweeper", "Minesweeper", <Minesweeper />,
-          {
-            baseWidth: Math.min(400, window.innerWidth - 24),
-            baseHeight: Math.min(560, window.innerHeight - 64),
-            contentClassName: "window-content-game"
-          })}
-      />
-      <DesktopIcon
-        icon={digdugIcon}
-        label="Dig Dug"
-        onDoubleClick={() => openWindow("digdug", "Dig Dug · Tunnel Trouble", <DigDug />,
-          {
-            baseWidth: Math.min(760, window.innerWidth - 24),
-            baseHeight: Math.min(900, window.innerHeight - 64),
-            contentClassName: "window-content-game"
-          })}
-      />
-      <DesktopIcon
-        icon={musicIcon}
-        label="CD Player"
-        onDoubleClick={() =>
-          openWindow(
-            "music",
-            "CD Player",
-            <MusicPlayer />,
-            { baseWidth: 340, baseHeight: 510 }
-          )
-        }
-      />
-
-      <DesktopIcon
-        icon={updatesIcon}
-        label="Updates"
-        onDoubleClick={() => openWindow("updates", "BuzzOS Updates", <Updates />,
-          { baseWidth: 420, baseHeight: 460 })}
-      />
-
-      <DesktopIcon
-        icon={pomodoroIcon}
-        label="Pomodoro"
-        onDoubleClick={() =>
-          openWindow(
-            "pomodoro",
-            "Pomodoro Timer",
-            <Pomodoro/>,
-            {aspectRatio: POMODORO_BASE_WIDTH / POMODORO_BASE_HEIGHT,
-              baseWidth: 320
-            }
-            
-          )
-        }
-      />
-      <DesktopIcon
-        icon={aboutIcon}
-        label="Meet Buzz"
-        onDoubleClick={() =>
-          openWindow(
-            "about",
-            "Meet Buzz",
-            <AboutMe />,
-            { baseWidth: 440, baseHeight: 500 }
-          )
-        }
-      />
-      <DesktopIcon
-        icon={todoIcon}
-        label="Todo"
-        onDoubleClick={() =>
-          openWindow(
-            "todo",
-            "Todo List",
-            <Todo />,
-            { baseWidth: 360 }
-          )
-        }
-      />
-      </div>
+      {/* The desktop and Start menu share the same application catalog. */}
+      {preferences.showIcons && <div className="desktop-icons">
+        {APPLICATIONS.map(app => (
+          <DesktopIcon key={app.id} icon={app.icon} label={app.label} onDoubleClick={() => launchApp(app.id)} />
+        ))}
+      </div>}
 
       {/* WINDOWS */}
       {windows.map(window => {
@@ -339,7 +275,7 @@ function App() {
           zIndex={window.zIndex}
           minimized={window.minimized}
           maximized={window.maximized}
-          isActive={activeWindowId === window.id}
+          isActive={activeWindowId === window.id && !startOpen}
           onFocus={() => activateWindow(window.id)}
           onClose={() => closeWindow(window.id)}
           onMinimize={() => minimizeWindow(window.id)}
@@ -352,7 +288,7 @@ function App() {
           {React.isValidElement(window.content)
             ? React.cloneElement(window.content, {
                 windowMetrics,
-                isActive: activeWindowId === window.id,
+                isActive: activeWindowId === window.id && !startOpen,
                 minimized: window.minimized,
               })
             : window.content}

@@ -29,7 +29,7 @@ function randomColor() {
   return SNACK_COLORS[Math.floor(Math.random() * SNACK_COLORS.length)];
 }
 
-export default function Snake() {
+export default function Snake({ isActive = true, minimized = false }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const gameLoop = useRef(null);
@@ -185,6 +185,7 @@ export default function Snake() {
   // keyboard
   useEffect(() => {
     function handleKey(e) {
+      if (!isActive || minimized) return;
       const state = gameStateRef.current;
       if (state === "idle" || state === "over") {
         if (e.key === " " || e.key === "Enter") {
@@ -204,7 +205,7 @@ export default function Snake() {
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [isActive, minimized]);
 
   // cleanup
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import startupSound from '../assets/audio/buzz-startup.mp3';
+import { readPreferences } from '../settings/preferences';
 import buzz from '../assets/buzz-character.png';
 import wallpaper from '../assets/wallpaper-hd.png';
 import roadmap from '../assets/roadmap.svg';
@@ -20,7 +21,7 @@ export default function BootScreen({ children }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (ready) return;
+    if (ready || !readPreferences().startupSound) return;
     const audio = new Audio(startupSound);
     audio.volume = 0.4;
     let active = true;

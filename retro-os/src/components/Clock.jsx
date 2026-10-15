@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Clock.css";
 
-export default function Clock() {
+export default function Clock({ clock24 = false }) {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -11,10 +11,7 @@ export default function Clock() {
     return () => clearInterval(interval);
   }, []);
 
-  const hours = time.toLocaleTimeString([], {
-    hour: "2-digit",
-    hour12: true
-  }).replace(/ AM| PM/, "");
+  const hours = String(clock24 ? time.getHours() : time.getHours() % 12 || 12).padStart(2, '0');
 
   const minutes = String(time.getMinutes()).padStart(2, "0");
 
@@ -26,7 +23,7 @@ export default function Clock() {
       {hours}
       <span className={`clock-colon ${showColon ? "on" : "off"}`}>:</span>
       {minutes}
-      <span className="clock-ampm">{ampm}</span>
+      {!clock24 && <span className="clock-ampm">{ampm}</span>}
     </div>
   );
 }
